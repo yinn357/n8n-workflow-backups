@@ -1,0 +1,315 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "MongoDB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "顶顶推送模拟数据": {
+      "main": [
+        [
+          {
+            "node": "调用钉钉推送",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB": {
+      "main": [
+        [
+          {
+            "node": "Get many states",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-06-27T06:39:25.208Z",
+  "id": "zInRhbWPXqADfBTi",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "test",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -260,
+        540
+      ],
+      "id": "1043ca25-b105-445c-9fb5-9d100ae72d93",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -220,
+        -220
+      ],
+      "id": "8de8a0e1-d2cc-4332-996b-06af45a0eaca",
+      "name": "顶顶推送模拟数据"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "4tHTAEVO9ryUxOhn",
+          "mode": "list",
+          "cachedResultName": "钉钉通知"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $json.name }}",
+            "state": "={{ $json.state }}",
+            "msgtype": "={{ $json.msgtype }}",
+            "text": "={{ $json.text }}",
+            "markdown": "={{ $json.markdown }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "state",
+              "displayName": "state",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "msgtype",
+              "displayName": "msgtype",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "text",
+              "displayName": "text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object"
+            },
+            {
+              "id": "markdown",
+              "displayName": "markdown",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        -220
+      ],
+      "id": "5a37eff3-e76f-42c0-beb9-477d7b2fa519",
+      "name": "调用钉钉推送"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "D7G7AhG09TUvHGAH",
+          "mode": "list",
+          "cachedResultName": "产生虚拟事件"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "eventName": "测试虚拟事件产生"
+          },
+          "matchingColumns": [
+            "eventName"
+          ],
+          "schema": [
+            {
+              "id": "eventName",
+              "displayName": "eventName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        20,
+        -40
+      ],
+      "id": "dd68b38e-b951-4d07-91d7-9654bcc1ee09",
+      "name": "Execute Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "={{ $json.code }}",
+        "value": "={{ $json.toJsonString() }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        20,
+        160
+      ],
+      "id": "648d0b86-ecc4-4039-86a1-4df4844ea5ca",
+      "name": "Redis",
+      "credentials": {
+        "redis": {
+          "id": "ChieJVyEK7H4OSmC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "key": "={{ $json.code }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        60,
+        360
+      ],
+      "id": "74b2f217-2e5f-4f87-997e-57b1288ef902",
+      "name": "Redis1",
+      "credentials": {
+        "redis": {
+          "id": "ChieJVyEK7H4OSmC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "findOneAndUpdate",
+        "collection": "test",
+        "updateKey": "code",
+        "fields": "code,name",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.2,
+      "position": [
+        -40,
+        540
+      ],
+      "id": "99e1932f-e3af-4451-bcaa-0b71ba6bc754",
+      "name": "MongoDB",
+      "credentials": {
+        "mongoDb": {
+          "id": "uKpjr544WS3Oo6zh",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "state",
+        "operation": "getAll",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.homeAssistant",
+      "typeVersion": 1,
+      "position": [
+        180,
+        540
+      ],
+      "id": "9a7d248f-57d2-49ca-8b32-7a86cd568c50",
+      "name": "Get many states",
+      "credentials": {
+        "homeAssistantApi": {
+          "id": "6EZ5GmsOjYCFa9Qg",
+          "name": "Home Assistant account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "顶顶推送模拟数据": [
+      {
+        "json": {
+          "msgtype": "text",
+          "text": {
+            "content": "没有状态和名称的推送"
+          }
+        }
+      }
+    ],
+    "When clicking ‘Execute workflow’": [
+      {
+        "json": {
+          "name": "First item",
+          "code": "k1"
+        }
+      },
+      {
+        "json": {
+          "name": "Second item",
+          "code": "k2"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-01T08:36:39.000Z",
+  "versionId": "f93e9384-1c52-4c4b-aab9-32ef64ed898f"
+}
