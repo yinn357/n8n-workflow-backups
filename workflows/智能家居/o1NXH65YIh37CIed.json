@@ -1,0 +1,317 @@
+{
+  "active": true,
+  "connections": {
+    "接收中枢虚拟事件": {
+      "main": [
+        [
+          {
+            "node": "必要字段",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "必要字段": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "\"ha_\"事件",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "\"ha_\"事件": {
+      "main": [
+        [
+          {
+            "node": "钉钉通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-03T09:20:18.575Z",
+  "id": "o1NXH65YIh37CIed",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "接收中枢虚拟事件",
+  "nodes": [
+    {
+      "parameters": {
+        "entityId": "event.xiaomi_cn_1079853347_hub1_virtual_event_e_4_1"
+      },
+      "type": "n8n-nodes-home-assistant-websocket.homeAssistantTrigger",
+      "typeVersion": 1,
+      "position": [
+        -220,
+        -80
+      ],
+      "id": "2c996d2f-228c-4a92-b686-bb8fd9548a51",
+      "name": "接收中枢虚拟事件",
+      "credentials": {
+        "homeAssistantWebSocketApi": {
+          "id": "7wjNw4sXPpob9vXk",
+          "name": "Home Assistant WebSocket account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "db9b0700-2d67-4ae7-87e5-8930c280ecdc",
+              "name": "event_type",
+              "value": "={{ $json.data.new_state.attributes.event_type }}",
+              "type": "string"
+            },
+            {
+              "id": "8e4368aa-ea08-497b-949f-96f3629fe30c",
+              "name": "event_name",
+              "value": "={{ $json.data.new_state.attributes['事件名称'] }}",
+              "type": "string"
+            },
+            {
+              "id": "7f90a8c3-e19d-4a3c-b8a4-f771198ad6b2",
+              "name": "creat_time",
+              "value": "={{ $json.timestamp }}",
+              "type": "string"
+            },
+            {
+              "id": "5d4b5761-34ae-4ee4-a9e0-5fe616d6db2d",
+              "name": "friendly_name",
+              "value": "={{ $json.data.new_state.attributes.friendly_name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        -80
+      ],
+      "id": "203a3d2d-a1f6-4ddf-97c5-2728d2f12757",
+      "name": "必要字段"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "4tHTAEVO9ryUxOhn",
+          "mode": "list",
+          "cachedResultName": "钉钉通知"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "msgtype": "text",
+            "content": "={{ $json.event_type }} : {{ $json.content }}",
+            "name": "={{ $workflow.name }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "msgtype",
+              "displayName": "msgtype",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "state",
+              "displayName": "state",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        660,
+        -80
+      ],
+      "id": "bc3c71ee-2710-4244-982a-862f395e1532",
+      "name": "钉钉通知"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {  \n  const data = item.json;\n  // 事件名称\n  let event_name = data.event_name;\n  // 内容\n  let content = event_name.replace(/[-|]/g, '\\\\n');\n  // 是否'ha_'开头事件\n  let is_ha = event_name.startsWith(\"ha_\");\n  let result = {\n    content,\n    is_ha,\n    event_name: data.event_name,\n    event_type: data.event_type,\n  }\n  \n  return { json: result };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        -80
+      ],
+      "id": "73f24882-895e-41d4-8232-3bf6653f1597",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fb1bfd4f-3d0f-4853-b3a7-347a75588868",
+              "leftValue": "={{ $json.is_ha }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        -80
+      ],
+      "id": "2b8105ed-8d3c-4aaf-982d-6e4f80d42809",
+      "name": "\"ha_\"事件"
+    }
+  ],
+  "pinData": {
+    "接收中枢虚拟事件": [
+      {
+        "json": {
+          "event_type": "state_changed",
+          "data": {
+            "entity_id": "event.xiaomi_cn_1079853347_hub1_virtual_event_e_4_1",
+            "old_state": {
+              "entity_id": "event.xiaomi_cn_1079853347_hub1_virtual_event_e_4_1",
+              "state": "2025-07-03T09:38:57.144+00:00",
+              "attributes": {
+                "event_types": [
+                  "虚拟事件发生"
+                ],
+                "event_type": "虚拟事件发生",
+                "事件名称": "ha_全局变量-有人:0|状态:0|灯光数量:0|光照度:95/213.758621",
+                "friendly_name": "中枢网关  虚拟服务 虚拟事件发生"
+              },
+              "last_changed": "2025-07-03T09:38:57.144561+00:00",
+              "last_reported": "2025-07-03T09:38:57.144561+00:00",
+              "last_updated": "2025-07-03T09:38:57.144561+00:00",
+              "context": {
+                "id": "01JZ7TEJZRX5JZYQ3Y2ATGZYP8",
+                "parent_id": null,
+                "user_id": null
+              }
+            },
+            "new_state": {
+              "entity_id": "event.xiaomi_cn_1079853347_hub1_virtual_event_e_4_1",
+              "state": "2025-07-03T09:41:59.224+00:00",
+              "attributes": {
+                "event_types": [
+                  "虚拟事件发生"
+                ],
+                "event_type": "虚拟事件发生",
+                "事件名称": "ha_全局变量-有人:0|状态:0|灯光数量:0|光照度:84/213.758621",
+                "friendly_name": "中枢网关  虚拟服务 虚拟事件发生"
+              },
+              "last_changed": "2025-07-03T09:41:59.224201+00:00",
+              "last_reported": "2025-07-03T09:41:59.224201+00:00",
+              "last_updated": "2025-07-03T09:41:59.224201+00:00",
+              "context": {
+                "id": "01JZ7TM4SR343XQAKY0D7CEGZ0",
+                "parent_id": null,
+                "user_id": null
+              }
+            }
+          },
+          "origin": "LOCAL",
+          "time_fired": "2025-07-03T09:41:59.224201+00:00",
+          "context": {
+            "id": "01JZ7TM4SR343XQAKY0D7CEGZ0",
+            "parent_id": null,
+            "user_id": null
+          },
+          "timestamp": "2025-07-03T09:41:59.227Z"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-06-26T06:14:33.448Z",
+      "updatedAt": "2025-06-26T06:14:33.448Z",
+      "id": "FHV017iDd8qf8jAL",
+      "name": "智能家居"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2025-07-11T03:54:31.000Z",
+  "versionId": "1f292451-ea43-4218-9bdf-045bf4959b99"
+}
