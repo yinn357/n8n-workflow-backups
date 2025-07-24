@@ -8,6 +8,11 @@
             "node": "必要字段",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "具体事件判断",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -27,18 +32,29 @@
       "main": [
         [
           {
-            "node": "\"ha_\"事件",
+            "node": "\"HA_\"事件",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "\"ha_\"事件": {
+    "\"HA_\"事件": {
       "main": [
         [
           {
             "node": "钉钉通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "具体事件判断": {
+      "main": [
+        [
+          {
+            "node": "电脑Wol网络唤醒",
             "type": "main",
             "index": 0
           }
@@ -62,7 +78,7 @@
       "typeVersion": 1,
       "position": [
         -220,
-        -80
+        20
       ],
       "id": "2c996d2f-228c-4a92-b686-bb8fd9548a51",
       "name": "接收中枢虚拟事件",
@@ -193,7 +209,7 @@
     },
     {
       "parameters": {
-        "jsCode": "return $input.all().map(item => {  \n  const data = item.json;\n  // 事件名称\n  let event_name = data.event_name;\n  // 内容\n  let content = event_name.replace(/[-|]/g, '\\\\n');\n  // 是否'ha_'开头事件\n  let is_ha = event_name.startsWith(\"ha_\");\n  let result = {\n    content,\n    is_ha,\n    event_name: data.event_name,\n    event_type: data.event_type,\n  }\n  \n  return { json: result };\n});\n"
+        "jsCode": "return $input.all().map(item => {  \n  const data = item.json;\n  // 事件名称\n  let event_name = data.event_name;\n  // 内容\n  let content = event_name.replace(/[-|]/g, '\\\\n');\n  // 是否'HA_'开头事件\n  let is_ha = event_name.startsWith(\"HA_\");\n  let result = {\n    content,\n    is_ha,\n    event_name: data.event_name,\n    event_type: data.event_type,\n  }\n  \n  return { json: result };\n});\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -236,7 +252,75 @@
         -80
       ],
       "id": "2b8105ed-8d3c-4aaf-982d-6e4f80d42809",
-      "name": "\"ha_\"事件"
+      "name": "\"HA_\"事件"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QnNHeu50JZe32GSw",
+          "mode": "list",
+          "cachedResultName": "电脑Wol网络唤醒"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        220,
+        120
+      ],
+      "id": "5e7ead5a-11dc-4fbe-9f62-751ca4904f9c",
+      "name": "电脑Wol网络唤醒"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.data.old_state.attributes[\"事件名称\"] }}",
+                    "rightValue": "HA_打开.书房电脑",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "9014a8a0-9522-4b97-9136-3e5e6997042a"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        0,
+        120
+      ],
+      "id": "24adbbf0-bd94-4bcc-a4d4-529d40f50813",
+      "name": "具体事件判断"
     }
   ],
   "pinData": {
@@ -312,6 +396,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-07-11T03:54:31.000Z",
-  "versionId": "1f292451-ea43-4218-9bdf-045bf4959b99"
+  "updatedAt": "2025-07-24T01:46:00.000Z",
+  "versionId": "ec3450e0-a502-4cf4-a582-e3f060679013"
 }
