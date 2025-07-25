@@ -1,0 +1,344 @@
+{
+  "active": true,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "获取HA日志",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "获取HA日志": {
+      "main": [
+        [
+          {
+            "node": "处理日期时间",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "处理日期时间": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "按小时分组处理统计",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "按小时分组处理统计": {
+      "main": [
+        [
+          {
+            "node": "转换为图表数据",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "转换为图表数据": {
+      "main": [
+        [
+          {
+            "node": "生成图标",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "生成图标": {
+      "main": [
+        [
+          {
+            "node": "markdown-钉钉通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "获取HA日志",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-25T03:45:21.562Z",
+  "id": "hJ3ECrGIVuMsO2Ka",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "HA日志处理",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        -176
+      ],
+      "id": "a4d9fe33-9f41-4cca-bc9e-d80a116a6927",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map((item)=>{\n  let data = item.json;\n  const dt = DateTime.fromISO(data.when, { zone: 'utc' })\n              .setZone('Asia/Shanghai'); // 设置目标时区\n  data.dateTime = dt.toString();\n  // 日\n  const day = dt.day;\n  // 小时\n  const hour = dt.hour;\n  // 日-小时\n  data.label = `${day}-${hour.toString().padStart(2,'0')}:00`\n  \n  return {json: {...data}};\n})"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        128,
+        -80
+      ],
+      "id": "2da9ca2b-7318-4532-8c14-5462e64e96f7",
+      "name": "处理日期时间"
+    },
+    {
+      "parameters": {
+        "resource": "log",
+        "operation": "getLogbookEntries",
+        "additionalFields": {
+          "endTime": "={{ (() => {\n  const d = new Date($now);\n  const pad = n => n.toString().padStart(2, '0');\n  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;\n})() }}",
+          "startTime": "={{ new Date(new Date($now).getTime() - 24 * 60 * 60 * 1000).toISOString().split('T')[0] + ' 00:00:00' }}"
+        }
+      },
+      "type": "n8n-nodes-base.homeAssistant",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        -80
+      ],
+      "id": "2dbb0f5d-7f57-4c7b-9223-ecab2901be66",
+      "name": "获取HA日志",
+      "credentials": {
+        "homeAssistantApi": {
+          "id": "6EZ5GmsOjYCFa9Qg",
+          "name": "Home Assistant account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "expression",
+        "numberOutputs": 3,
+        "output": "={{\n$json.entity_id.startsWith('sensor.') && $json.name.endsWith('有人无人状态') && ['有人','SomeOne'].includes($json.state)?0:\n$json.entity_id.startsWith('light.')?1:2\n}}"
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        352,
+        -96
+      ],
+      "id": "f4b1826e-4e5b-4f8c-b307-53b4911036eb",
+      "name": "Switch",
+      "notes": "0:name like '%有人无人状态' // 有无人\n1:entity_id like 'light.%'  // 灯"
+    },
+    {
+      "parameters": {
+        "content": "## Switch\n- 0: 存在传感器 **有人**\n- 1: 灯光 **开启**",
+        "height": 320,
+        "width": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        256,
+        -224
+      ],
+      "typeVersion": 1,
+      "id": "ef43bfce-168c-4340-ae9c-5d4dcf791bdb",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 获取所有数据\nconst allData = $input.all();\n\n// 获取最小/最大日期\nconst { minDate, maxDate } = allData.reduce((acc, curr) => {\n  const currentDate = new Date(curr.json.when);\n  if (!acc.minDate || currentDate < acc.minDate) {\n    acc.minDate = currentDate;\n  }\n  if (!acc.maxDate || currentDate > acc.maxDate) {\n    acc.maxDate = currentDate;\n  }\n  return acc;\n}, { minDate: null, maxDate: null });\n\n// 按小时统计\nconst countsPerHour = {};\n\n// 设置起始时间为整点小时\nlet current = new Date(minDate);\ncurrent.setMinutes(0, 0, 0); // 清除分钟和秒\n\nwhile (current <= maxDate) {\n  // 下一个小时\n  const nextHour = new Date(current);\n  nextHour.setHours(current.getHours() + 1);\n\n  // 构造小时字符串（例如 \"2025-07-25 14:00\"）\n  const hourKey = current.getFullYear() + '-' +\n    String(current.getMonth() + 1).padStart(2, '0') + '-' +\n    String(current.getDate()).padStart(2, '0') + ' ' +\n    String(current.getHours()).padStart(2, '0') + ':00';\n\n  // 统计当前小时内的记录数量\n  const count = allData.filter(item => {\n    const date = new Date(item.json.when);\n    return date >= current && date < nextHour;\n  }).length;\n\n  countsPerHour[hourKey] = count;\n\n  // 移动到下一个小时\n  current = nextHour;\n}\n\n// 返回格式化结果\nreturn Object.entries(countsPerHour).map(([hour, count]) => {\n  return { json: { hour, count } };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        576,
+        -80
+      ],
+      "id": "1990b53b-0f00-4699-8b7c-432a9f344cd0",
+      "name": "按小时分组处理统计"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://quickchart.io/chart/create",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1024,
+        -80
+      ],
+      "id": "636b29d4-5d46-45f5-9a01-5757cc2f3f87",
+      "name": "生成图标"
+    },
+    {
+      "parameters": {
+        "jsCode": "const labels = [];\nconst data = [];\n$input.all().forEach(item=>{\n  let label = item.json.hour.split(' ')[1];\n  labels.push(label);\n  data.push(item.json.count);\n})\nlet title = $input.all().at(0).json.hour +' ~ '+$input.all().at($input.all().length-1).json.hour +' 活动情况'\nreturn [{json:{\n    \"width\": 600,\n    \"height\": 300,\n    \"chart\":{\n    \"type\": \"line\",\n    \"data\": {\n      \"labels\": labels,\n      \"datasets\": [\n        {\n          \"type\": \"line\",\n          \"label\": title,\n          \"lineTension\": 0.4,\n          \"borderWidth\": 1,\n          \"pointRadius\": 0,\n          \"borderColor\": \"rgb(54, 162, 235)\",\n          \"fill\": false,\n          \"data\": data\n        }\n      ]\n    }\n  }\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        800,
+        -80
+      ],
+      "id": "12a5aac4-682e-4345-b67a-ca3e9a599cd9",
+      "name": "转换为图表数据"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "4tHTAEVO9ryUxOhn",
+          "mode": "list",
+          "cachedResultName": "钉钉通知"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "content": "=![]({{ $json.url }})",
+            "msgtype": "markdown",
+            "name": "活动情况",
+            "title": "活动情况"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "msgtype",
+              "displayName": "msgtype",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "state",
+              "displayName": "state",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1248,
+        -80
+      ],
+      "id": "08377b1c-fa38-427c-ae0b-568473528112",
+      "name": "markdown-钉钉通知"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -320,
+        16
+      ],
+      "id": "8feea5b8-3eaf-402f-bf5a-911306dd337b",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Shanghai",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [
+    {
+      "createdAt": "2025-06-26T06:14:33.448Z",
+      "updatedAt": "2025-06-26T06:14:33.448Z",
+      "id": "FHV017iDd8qf8jAL",
+      "name": "智能家居"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2025-07-25T09:01:40.000Z",
+  "versionId": "69f60be7-f272-4249-92ae-0d136565b306"
+}
