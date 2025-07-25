@@ -3,13 +3,7 @@
   "connections": {
     "When clicking ‘Execute workflow’": {
       "main": [
-        [
-          {
-            "node": "MongoDB",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "顶顶推送模拟数据": {
@@ -48,8 +42,8 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -260,
-        540
+        -320,
+        480
       ],
       "id": "1043ca25-b105-445c-9fb5-9d100ae72d93",
       "name": "When clicking ‘Execute workflow’"
@@ -64,8 +58,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -220,
-        -220
+        -224,
+        -224
       ],
       "id": "8de8a0e1-d2cc-4332-996b-06af45a0eaca",
       "name": "顶顶推送模拟数据"
@@ -144,7 +138,7 @@
       "typeVersion": 1.2,
       "position": [
         0,
-        -220
+        -224
       ],
       "id": "5a37eff3-e76f-42c0-beb9-477d7b2fa519",
       "name": "调用钉钉推送"
@@ -185,8 +179,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        20,
-        -40
+        32,
+        -48
       ],
       "id": "dd68b38e-b951-4d07-91d7-9654bcc1ee09",
       "name": "Execute Workflow"
@@ -200,7 +194,7 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        20,
+        32,
         160
       ],
       "id": "648d0b86-ecc4-4039-86a1-4df4844ea5ca",
@@ -221,8 +215,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        60,
-        360
+        64,
+        368
       ],
       "id": "74b2f217-2e5f-4f87-997e-57b1288ef902",
       "name": "Redis1",
@@ -244,8 +238,8 @@
       "type": "n8n-nodes-base.mongoDb",
       "typeVersion": 1.2,
       "position": [
-        -40,
-        540
+        -48,
+        544
       ],
       "id": "99e1932f-e3af-4451-bcaa-0b71ba6bc754",
       "name": "MongoDB",
@@ -265,8 +259,8 @@
       "type": "n8n-nodes-base.homeAssistant",
       "typeVersion": 1,
       "position": [
-        180,
-        540
+        192,
+        544
       ],
       "id": "9a7d248f-57d2-49ca-8b32-7a86cd568c50",
       "name": "Get many states",
@@ -276,6 +270,83 @@
           "name": "Home Assistant account"
         }
       }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "4tHTAEVO9ryUxOhn",
+          "mode": "list",
+          "cachedResultName": "钉钉通知"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "content": "![](https://quickchart.io/chart/render/zf-2b07d0a9-cdac-46da-967d-6face7147cb4)",
+            "msgtype": "markdown",
+            "title": "test"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "msgtype",
+              "displayName": "msgtype",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "state",
+              "displayName": "state",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -208,
+        736
+      ],
+      "id": "ccfeaa43-da2b-4f71-a3c5-10e11f6a9f7e",
+      "name": "markdown-钉钉通知"
     }
   ],
   "pinData": {
@@ -310,6 +381,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-01T08:36:39.000Z",
-  "versionId": "f93e9384-1c52-4c4b-aab9-32ef64ed898f"
+  "updatedAt": "2025-07-25T03:36:36.000Z",
+  "versionId": "fe749456-abb8-4e6e-bd50-24c254e19f75"
 }
