@@ -46,7 +46,7 @@
   "id": "D7G7AhG09TUvHGAH",
   "isArchived": false,
   "meta": null,
-  "name": "产生虚拟事件",
+  "name": "sub-产生虚拟事件",
   "nodes": [
     {
       "parameters": {
@@ -57,7 +57,7 @@
       "typeVersion": 1.1,
       "position": [
         -160,
-        40
+        48
       ],
       "id": "35b87d87-1273-46f4-8a1f-979548373f88",
       "name": "产生虚拟事件入口"
@@ -84,8 +84,8 @@
       "type": "n8n-nodes-base.homeAssistant",
       "typeVersion": 1,
       "position": [
-        60,
-        40
+        64,
+        48
       ],
       "id": "97b42bd6-f47b-48a1-a970-fa3d6a4e5a1f",
       "name": "产生中枢虚拟事件",
@@ -126,8 +126,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        280,
-        40
+        288,
+        48
       ],
       "id": "237ea04d-f3b0-4066-808e-199d6d529d06",
       "name": "If"
@@ -204,8 +204,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        500,
-        -60
+        512,
+        -64
       ],
       "id": "c2d7add4-5e5f-4f4a-96ca-74e22aa64e0b",
       "name": "成功-钉钉通知"
@@ -282,8 +282,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        500,
-        140
+        512,
+        144
       ],
       "id": "34480ecc-bbc5-496d-8eec-8ab46cd4f697",
       "name": "失败-钉钉通知"
@@ -334,6 +334,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-07-11T03:54:22.000Z",
-  "versionId": "b8a4054e-e5ce-4daf-be22-43f67590dc4a"
+  "updatedAt": "2025-07-29T08:20:48.000Z",
+  "versionId": "0f979731-47c1-4557-b82f-6f17ae07ea12"
 }
