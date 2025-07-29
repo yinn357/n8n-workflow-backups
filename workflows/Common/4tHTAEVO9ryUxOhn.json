@@ -33,7 +33,7 @@
   "id": "4tHTAEVO9ryUxOhn",
   "isArchived": false,
   "meta": null,
-  "name": "钉钉通知",
+  "name": "sub-钉钉通知",
   "nodes": [
     {
       "parameters": {
@@ -43,8 +43,8 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -340,
-        -60
+        -336,
+        -64
       ],
       "id": "de4e7850-1148-4e14-9f43-9c36a39676f4",
       "name": "子流程入口",
@@ -62,8 +62,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        100,
-        -60
+        112,
+        -64
       ],
       "id": "e576ad71-b9d7-4de7-9c5b-bdf35db2abce",
       "name": "钉钉webhook",
@@ -77,8 +77,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -120,
-        -60
+        -128,
+        -64
       ],
       "id": "2f710595-0d85-4371-bd35-25dfe488f804",
       "name": "消息处理",
@@ -103,6 +103,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-07-11T03:55:51.000Z",
-  "versionId": "43d2343a-3f2a-4a88-acc6-cc3266cbe299"
+  "updatedAt": "2025-07-29T08:20:27.000Z",
+  "versionId": "577d06fb-229b-49a9-b001-74493b74eac5"
 }
