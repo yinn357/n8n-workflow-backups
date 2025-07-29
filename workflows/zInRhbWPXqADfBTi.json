@@ -347,6 +347,33 @@
       ],
       "id": "ccfeaa43-da2b-4f71-a3c5-10e11f6a9f7e",
       "name": "markdown-钉钉通知"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.0-flash-exp-image-generation",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.0-flash-exp-image-generation"
+        },
+        "prompt": "生成一张独眼小黄人的图片,手绘风格,透明背景",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -592,
+        -128
+      ],
+      "id": "eef1e905-6956-4565-8d2a-b4fa94b39fa0",
+      "name": "Generate an image",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "nhmY1teQyjDTFTIP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
     }
   ],
   "pinData": {
@@ -381,6 +408,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-25T03:36:36.000Z",
-  "versionId": "fe749456-abb8-4e6e-bd50-24c254e19f75"
+  "updatedAt": "2025-07-29T08:26:43.000Z",
+  "versionId": "6e109ebe-91b1-4c02-b6d7-1edd94270451"
 }
