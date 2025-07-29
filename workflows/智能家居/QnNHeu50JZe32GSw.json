@@ -24,7 +24,7 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "name": "电脑Wol网络唤醒",
+  "name": "sub-电脑Wol网络唤醒",
   "nodes": [
     {
       "parameters": {
@@ -34,8 +34,8 @@
       "id": "ssh-node",
       "name": "执行Wol网络唤醒",
       "position": [
-        460,
-        200
+        464,
+        208
       ],
       "type": "n8n-nodes-base.ssh",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
       "typeVersion": 1.1,
       "position": [
         240,
-        200
+        208
       ],
       "id": "abf8079c-80a8-4d6f-a193-9b0a0a1b55b9",
       "name": "子流程-电脑Wol网络唤醒"
@@ -73,6 +73,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-07-24T01:50:57.000Z",
-  "versionId": "782ef58f-508a-4805-93e8-3c86b8732114"
+  "updatedAt": "2025-07-29T08:20:59.000Z",
+  "versionId": "1a768fc0-7789-406b-b886-19f3848ad441"
 }
