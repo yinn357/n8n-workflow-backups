@@ -8,11 +8,6 @@
             "node": "必要字段",
             "type": "main",
             "index": 0
-          },
-          {
-            "node": "具体事件判断",
-            "type": "main",
-            "index": 0
           }
         ]
       ]
@@ -21,18 +16,30 @@
       "main": [
         [
           {
-            "node": "Code",
+            "node": "具体事件判断",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "\"HA_\"事件",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Code": {
+    "具体事件判断": {
       "main": [
         [
           {
-            "node": "\"HA_\"事件",
+            "node": "全局变量处理",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "电脑Wol网络唤醒",
             "type": "main",
             "index": 0
           }
@@ -50,11 +57,11 @@
         ]
       ]
     },
-    "具体事件判断": {
+    "全局变量处理": {
       "main": [
         [
           {
-            "node": "电脑Wol网络唤醒",
+            "node": "保存到n8n.global_variables",
             "type": "main",
             "index": 0
           }
@@ -77,10 +84,10 @@
       "type": "n8n-nodes-home-assistant-websocket.homeAssistantTrigger",
       "typeVersion": 1,
       "position": [
-        -220,
-        20
+        -16,
+        208
       ],
-      "id": "2c996d2f-228c-4a92-b686-bb8fd9548a51",
+      "id": "841c99f0-c59e-4f26-b4fe-66f4af34ce6f",
       "name": "接收中枢虚拟事件",
       "credentials": {
         "homeAssistantWebSocketApi": {
@@ -124,10 +131,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        0,
-        -80
+        208,
+        208
       ],
-      "id": "203a3d2d-a1f6-4ddf-97c5-2728d2f12757",
+      "id": "b5147c52-b458-4cbe-86ed-8b4dee9528e5",
       "name": "必要字段"
     },
     {
@@ -136,7 +143,7 @@
           "__rl": true,
           "value": "4tHTAEVO9ryUxOhn",
           "mode": "list",
-          "cachedResultName": "钉钉通知"
+          "cachedResultName": "sub-钉钉通知"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -201,58 +208,11 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        660,
-        -80
+        656,
+        16
       ],
-      "id": "bc3c71ee-2710-4244-982a-862f395e1532",
+      "id": "24beb4d6-db30-4ce4-96e9-39ced468bb00",
       "name": "钉钉通知"
-    },
-    {
-      "parameters": {
-        "jsCode": "return $input.all().map(item => {  \n  const data = item.json;\n  // 事件名称\n  let event_name = data.event_name;\n  // 内容\n  let content = event_name.replace(/[-|]/g, '\\\\n');\n  // 是否'HA_'开头事件\n  let is_ha = event_name.startsWith(\"HA_\");\n  let result = {\n    content,\n    is_ha,\n    event_name: data.event_name,\n    event_type: data.event_type,\n  }\n  \n  return { json: result };\n});\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        220,
-        -80
-      ],
-      "id": "73f24882-895e-41d4-8232-3bf6653f1597",
-      "name": "Code"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "fb1bfd4f-3d0f-4853-b3a7-347a75588868",
-              "leftValue": "={{ $json.is_ha }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "true",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        440,
-        -80
-      ],
-      "id": "2b8105ed-8d3c-4aaf-982d-6e4f80d42809",
-      "name": "\"HA_\"事件"
     },
     {
       "parameters": {
@@ -277,10 +237,10 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        220,
-        120
+        656,
+        400
       ],
-      "id": "5e7ead5a-11dc-4fbe-9f62-751ca4904f9c",
+      "id": "c2999fa4-8367-4f8e-bce0-872511a60a5b",
       "name": "电脑Wol网络唤醒"
     },
     {
@@ -297,13 +257,36 @@
                 },
                 "conditions": [
                   {
-                    "leftValue": "={{ $json.data.old_state.attributes[\"事件名称\"] }}",
+                    "leftValue": "={{ $json.event_name }}",
+                    "rightValue": "HA_全局变量",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    },
+                    "id": "9014a8a0-9522-4b97-9136-3e5e6997042a"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c45c396e-f194-493c-bda8-cf3997e0eab2",
+                    "leftValue": "={{ $json.event_name }}",
                     "rightValue": "HA_打开.书房电脑",
                     "operator": {
                       "type": "string",
-                      "operation": "equals"
-                    },
-                    "id": "9014a8a0-9522-4b97-9136-3e5e6997042a"
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
                   }
                 ],
                 "combinator": "and"
@@ -316,11 +299,104 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        0,
-        120
+        432,
+        304
       ],
-      "id": "24adbbf0-bd94-4bcc-a4d4-529d40f50813",
+      "id": "fa7d110e-9543-4a40-ae26-56c2cbc692e4",
       "name": "具体事件判断"
+    },
+    {
+      "parameters": {
+        "content": "## \"HA_\"事件\n- 排除\"HA_全局变量\"\n## 具体事件判断\n- 0.全局变量\n- 1.打开书房电脑",
+        "height": 272
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        368,
+        192
+      ],
+      "typeVersion": 1,
+      "id": "50ea6ca2-ec2c-4228-96f2-88876b362811",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fb1bfd4f-3d0f-4853-b3a7-347a75588868",
+              "leftValue": "={{ $json.event_name }}",
+              "rightValue": "HA_",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            },
+            {
+              "id": "805f7896-4e06-4561-a1fe-30e30645af12",
+              "leftValue": "={{ $json.event_name }}",
+              "rightValue": "HA_全局变量",
+              "operator": {
+                "type": "string",
+                "operation": "notStartsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        432,
+        16
+      ],
+      "id": "6a6e9237-75fd-42d0-962b-05ea25f7621a",
+      "name": "\"HA_\"事件"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {  \n  const data = item.json;\n  // 事件名称\n  let event_name = data.event_name;\n  // 去除前缀\n  const rawString = event_name.replace(/^HA_全局变量-/, '');\n  // 拆分为键值对对象\n  const dataMap = {};\n  rawString.split('|').forEach(pair => {\n    const [key, value] = pair.split(':').map(s => s.trim());\n    dataMap[key] = isNaN(value) ? value : Number(value);\n  });\n  \n  const pad = (n) => n.toString().padStart(2, '0');\n  const now = new Date(data.creat_time);\n  dataMap['时间'] = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;\n  \n  dataMap['源数据'] = data.event_name;\n\n  const keys = Object.keys(dataMap);\n\n  let result = {\n    keys,\n    ...dataMap,\n  }\n  \n  return { json: result };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        208
+      ],
+      "id": "0aeb7359-b270-4db9-bbe5-0a10f5019b96",
+      "name": "全局变量处理"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "global_variables",
+        "fields": "={{ $json.keys.join() }}",
+        "options": {
+          "useDotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.2,
+      "position": [
+        864,
+        208
+      ],
+      "id": "14d4ee35-e176-4796-a5f4-f1c07dcfa0a9",
+      "name": "保存到n8n.global_variables",
+      "credentials": {
+        "mongoDb": {
+          "id": "Fzidi3QSrpr5jz68",
+          "name": "MongoDB ClawCloud"
+        }
+      }
     }
   ],
   "pinData": {
@@ -332,53 +408,53 @@
             "entity_id": "event.xiaomi_cn_1079853347_hub1_virtual_event_e_4_1",
             "old_state": {
               "entity_id": "event.xiaomi_cn_1079853347_hub1_virtual_event_e_4_1",
-              "state": "2025-07-03T09:38:57.144+00:00",
+              "state": "2025-07-30T03:13:54.739+00:00",
               "attributes": {
                 "event_types": [
                   "虚拟事件发生"
                 ],
                 "event_type": "虚拟事件发生",
-                "事件名称": "ha_全局变量-有人:0|状态:0|灯光数量:0|光照度:95/213.758621",
+                "事件名称": "HA_全局变量-平均光照度: 173|光照度: 359.627136|天亮: 1|有人: 1|睡眠: 0|灯光数量: 0|书房电脑: 0|家电数量: 1",
                 "friendly_name": "中枢网关  虚拟服务 虚拟事件发生"
               },
-              "last_changed": "2025-07-03T09:38:57.144561+00:00",
-              "last_reported": "2025-07-03T09:38:57.144561+00:00",
-              "last_updated": "2025-07-03T09:38:57.144561+00:00",
+              "last_changed": "2025-07-30T03:13:54.739094+00:00",
+              "last_reported": "2025-07-30T03:13:54.739094+00:00",
+              "last_updated": "2025-07-30T03:13:54.739094+00:00",
               "context": {
-                "id": "01JZ7TEJZRX5JZYQ3Y2ATGZYP8",
+                "id": "01K1CN4Z1KR1421W5RHPTF7FFP",
                 "parent_id": null,
                 "user_id": null
               }
             },
             "new_state": {
               "entity_id": "event.xiaomi_cn_1079853347_hub1_virtual_event_e_4_1",
-              "state": "2025-07-03T09:41:59.224+00:00",
+              "state": "2025-07-30T03:14:17.532+00:00",
               "attributes": {
                 "event_types": [
                   "虚拟事件发生"
                 ],
                 "event_type": "虚拟事件发生",
-                "事件名称": "ha_全局变量-有人:0|状态:0|灯光数量:0|光照度:84/213.758621",
+                "事件名称": "HA_全局变量-平均光照度: 193|光照度: 449.598816|天亮: 1|有人: 1|睡眠: 0|灯光数量: 0|书房电脑: 0|家电数量: 1",
                 "friendly_name": "中枢网关  虚拟服务 虚拟事件发生"
               },
-              "last_changed": "2025-07-03T09:41:59.224201+00:00",
-              "last_reported": "2025-07-03T09:41:59.224201+00:00",
-              "last_updated": "2025-07-03T09:41:59.224201+00:00",
+              "last_changed": "2025-07-30T03:14:17.532813+00:00",
+              "last_reported": "2025-07-30T03:14:17.532813+00:00",
+              "last_updated": "2025-07-30T03:14:17.532813+00:00",
               "context": {
-                "id": "01JZ7TM4SR343XQAKY0D7CEGZ0",
+                "id": "01K1CN5N9WHDYQWK2JTK2B5NZH",
                 "parent_id": null,
                 "user_id": null
               }
             }
           },
           "origin": "LOCAL",
-          "time_fired": "2025-07-03T09:41:59.224201+00:00",
+          "time_fired": "2025-07-30T03:14:17.532813+00:00",
           "context": {
-            "id": "01JZ7TM4SR343XQAKY0D7CEGZ0",
+            "id": "01K1CN5N9WHDYQWK2JTK2B5NZH",
             "parent_id": null,
             "user_id": null
           },
-          "timestamp": "2025-07-03T09:41:59.227Z"
+          "timestamp": "2025-07-30T03:14:17.538Z"
         }
       }
     ]
@@ -396,6 +472,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-07-24T01:46:00.000Z",
-  "versionId": "ec3450e0-a502-4cf4-a582-e3f060679013"
+  "updatedAt": "2025-07-30T05:38:06.000Z",
+  "versionId": "3b7bcb82-d5c4-4cc9-8e4a-983be73f971d"
 }
