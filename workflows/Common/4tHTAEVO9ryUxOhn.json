@@ -5,7 +5,7 @@
       "main": [
         [
           {
-            "node": "消息处理",
+            "node": "机器人关键词处理",
             "type": "main",
             "index": 0
           }
@@ -27,12 +27,48 @@
           }
         ]
       ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "钉钉机器人-text",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "钉钉机器人-markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "钉钉机器人-text": {
+      "main": [
+        []
+      ]
+    },
+    "机器人关键词处理": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-06-27T04:05:59.471Z",
   "id": "4tHTAEVO9ryUxOhn",
   "isArchived": false,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "name": "sub-钉钉通知",
   "nodes": [
     {
@@ -43,8 +79,8 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -336,
-        -64
+        -416,
+        32
       ],
       "id": "de4e7850-1148-4e14-9f43-9c36a39676f4",
       "name": "子流程入口",
@@ -62,8 +98,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        112,
-        -64
+        -192,
+        352
       ],
       "id": "e576ad71-b9d7-4de7-9c5b-bdf35db2abce",
       "name": "钉钉webhook",
@@ -77,17 +113,144 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -128,
-        -64
+        -416,
+        352
       ],
       "id": "2f710595-0d85-4371-bd35-25dfe488f804",
       "name": "消息处理",
       "notesInFlow": true,
       "retryOnFail": false,
       "notes": "对添加消息头部信息,包含webhook关键字"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.msgtype }}",
+                    "rightValue": "text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "cccd874a-f90c-459a-986c-e0eb7b7c0e72"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8c3c18ff-32d9-4ddf-87b0-4e29cf5b5fe5",
+                    "leftValue": "={{ $json.msgtype }}",
+                    "rightValue": "markdown",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        32,
+        32
+      ],
+      "id": "271e64cd-5b22-4a74-ac8d-dffc9f69fc08",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "msgtype": "markdown",
+        "title": "={{ $json.title }}",
+        "markdownText": "={{ $json.content }}"
+      },
+      "type": "n8n-nodes-dingtalk.dingTalkRobot",
+      "typeVersion": 1,
+      "position": [
+        256,
+        128
+      ],
+      "id": "9b298538-2d9a-495e-ac61-0bf649edd318",
+      "name": "钉钉机器人-markdown",
+      "credentials": {
+        "dingTalkCustomRobotApi": {
+          "id": "ewEy0mraYFqwnuN2",
+          "name": "DingTalk - Automation"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "={{ $json.content }}"
+      },
+      "type": "n8n-nodes-dingtalk.dingTalkRobot",
+      "typeVersion": 1,
+      "position": [
+        256,
+        -64
+      ],
+      "id": "052364b9-7d67-4be4-b4b7-00f81619fc14",
+      "name": "钉钉机器人-text",
+      "credentials": {
+        "dingTalkCustomRobotApi": {
+          "id": "ewEy0mraYFqwnuN2",
+          "name": "DingTalk - Automation"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const data = item.json;\n  // 名称\n  let name = data.name || $workflow.name.replaceAll('sub-','');\n  // 状态\n  let state = data.state || '💬';\n  switch (state) {\n    case '失败':\n      state = state+'❌';\n      break;\n    case '成功':\n      state = state+'✅';\n      break;\n  }\n  \n  // 消息头\n  const msgHeader  = `${name}: ${state} - n8n Automation Notify\\n\\n`\n  // 内容\n  data.content = msgHeader + data.content;\n  data.title = data.title || '';\n  return { json: data };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -192,
+        32
+      ],
+      "id": "a0dee420-3206-4cf1-80cb-0aecb48c86d9",
+      "name": "机器人关键词处理"
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "子流程入口": [
+      {
+        "json": {
+          "msgtype": "markdown",
+          "content": "markdown-n8n",
+          "title": "title",
+          "name": "名称",
+          "state": "成功"
+        }
+      }
+    ]
+  },
   "settings": {
     "executionOrder": "v1",
     "timezone": "Asia/Shanghai",
@@ -103,6 +266,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-07-29T08:20:27.000Z",
-  "versionId": "577d06fb-229b-49a9-b001-74493b74eac5"
+  "updatedAt": "2025-07-30T09:09:41.000Z",
+  "versionId": "4e384e18-9495-40ee-a80c-34ee75b82892"
 }
