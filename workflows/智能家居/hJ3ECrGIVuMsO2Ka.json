@@ -179,7 +179,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// 获取所有数据\nconst allData = $input.all();\n\n// 获取最小/最大日期\nconst { minDate, maxDate } = allData.reduce((acc, curr) => {\n  const currentDate = new Date(curr.json.when);\n  if (!acc.minDate || currentDate < acc.minDate) {\n    acc.minDate = currentDate;\n  }\n  if (!acc.maxDate || currentDate > acc.maxDate) {\n    acc.maxDate = currentDate;\n  }\n  return acc;\n}, { minDate: null, maxDate: null });\n\n// 按小时统计\nconst countsPerHour = {};\n\n// 设置起始时间为整点小时\nlet current = new Date(minDate);\ncurrent.setMinutes(0, 0, 0); // 清除分钟和秒\n\nwhile (current <= maxDate) {\n  // 下一个小时\n  const nextHour = new Date(current);\n  nextHour.setHours(current.getHours() + 1);\n\n  // 构造小时字符串（例如 \"2025-07-25 14:00\"）\n  const hourKey = current.getFullYear() + '-' +\n    String(current.getMonth() + 1).padStart(2, '0') + '-' +\n    String(current.getDate()).padStart(2, '0') + ' ' +\n    String(current.getHours()).padStart(2, '0') + ':00';\n\n  // 统计当前小时内的记录数量\n  const count = allData.filter(item => {\n    const date = new Date(item.json.when);\n    return date >= current && date < nextHour;\n  }).length;\n\n  countsPerHour[hourKey] = count;\n\n  // 移动到下一个小时\n  current = nextHour;\n}\n\n// 返回格式化结果\nreturn Object.entries(countsPerHour).map(([hour, count]) => {\n  return { json: { hour, count } };\n});\n"
+        "jsCode": "// 获取所有数据\nconst allData = $input.all();\n\n// 获取最小/最大日期\nconst { minDate, maxDate } = allData.reduce((acc, curr) => {\n  const currentDate = new Date(curr.json.when);\n  if (!acc.minDate || currentDate < acc.minDate) {\n    acc.minDate = currentDate;\n  }\n  if (!acc.maxDate || currentDate > acc.maxDate) {\n    acc.maxDate = currentDate;\n  }\n  return acc;\n}, { minDate: null, maxDate: null });\n\n// 按 10 分钟统计\nconst countsPer10Min = {};\n\n// 设置起始时间向下对齐到最近的 10 分钟\nlet current = new Date(minDate);\nconst m = current.getMinutes();\n// 计算对齐后的分钟数：向下取整到 10 的倍数\nconst alignedMin = Math.floor(m / 10) * 10;\ncurrent.setMinutes(alignedMin, 0, 0);\n\n// 循环，每次加 10 分钟\nconst TEN_MIN_MS = 10 * 60 * 1000;\nwhile (current <= maxDate) {\n  const next = new Date(current.getTime() + TEN_MIN_MS);\n\n  // 构造 10 分钟区间 key，例如 \"2025-07-25 14:20\"\n  const Y = current.getFullYear();\n  const M = String(current.getMonth() + 1).padStart(2, '0');\n  const D = String(current.getDate()).padStart(2, '0');\n  const H = String(current.getHours()).padStart(2, '0');\n  const mm = String(current.getMinutes()).padStart(2, '0');\n  const tenMinKey = `${Y}-${M}-${D} ${H}:${mm}`;\n\n  // 统计当前 10 分钟区间内的记录数量\n  const count = allData.filter(item => {\n    const date = new Date(item.json.when);\n    return date >= current && date < next;\n  }).length;\n\n  countsPer10Min[tenMinKey] = count;\n\n  // 移动到下一个 10 分钟\n  current = next;\n}\n\n// 返回格式化结果\nreturn Object.entries(countsPer10Min).map(([interval, count]) => {\n  return { json: { hour:interval, count } };\n});\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -210,7 +210,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const labels = [];\nconst data = [];\n$input.all().forEach(item=>{\n  let label = item.json.hour.split(' ')[1];\n  labels.push(label);\n  data.push(item.json.count);\n})\nlet title = $input.all().at(0).json.hour +' ~ '+$input.all().at($input.all().length-1).json.hour +' 活动情况'\nreturn [{json:{\n    \"width\": 600,\n    \"height\": 300,\n    \"chart\":{\n    \"type\": \"line\",\n    \"data\": {\n      \"labels\": labels,\n      \"datasets\": [\n        {\n          \"type\": \"line\",\n          \"label\": title,\n          \"lineTension\": 0.4,\n          \"borderWidth\": 1,\n          \"pointRadius\": 0,\n          \"borderColor\": \"rgb(54, 162, 235)\",\n          \"fill\": false,\n          \"data\": data\n        }\n      ]\n    }\n  }\n}}];"
+        "jsCode": "const labels = [];\nconst data = [];\n$input.all().forEach(item=>{\n  let label = item.json.hour.split(' ')[1];\n  labels.push(label);\n  data.push(item.json.count);\n})\nlet title = $input.all().at(0).json.hour +' ~ '+$input.all().at($input.all().length-1).json.hour +' 活动情况'\nreturn [{json:{\n    \"width\": 600,\n    \"height\": 300,\n    // \"format\": \"base64\",\n    \"chart\":{\n    \"type\": \"line\",\n    \"data\": {\n      \"labels\": labels,\n      \"datasets\": [\n        {\n          \"type\": \"line\",\n          \"label\": title,\n          \"lineTension\": 0.4,\n          \"borderWidth\": 1,\n          \"pointRadius\": 0,\n          \"borderColor\": \"rgb(54, 162, 235)\",\n          \"fill\": false,\n          \"data\": data\n        }\n      ]\n    }\n  }\n}}];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -227,7 +227,7 @@
           "__rl": true,
           "value": "4tHTAEVO9ryUxOhn",
           "mode": "list",
-          "cachedResultName": "钉钉通知"
+          "cachedResultName": "sub-钉钉通知"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -339,6 +339,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-07-25T09:01:40.000Z",
-  "versionId": "69f60be7-f272-4249-92ae-0d136565b306"
+  "updatedAt": "2025-07-30T06:44:31.000Z",
+  "versionId": "bb45168d-bb57-4a7b-a597-f6f26ad4b6ce"
 }
