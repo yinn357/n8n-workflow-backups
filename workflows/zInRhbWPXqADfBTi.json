@@ -1,11 +1,6 @@
 {
   "active": false,
   "connections": {
-    "When clicking ‘Execute workflow’": {
-      "main": [
-        []
-      ]
-    },
     "顶顶推送模拟数据": {
       "main": [
         [
@@ -27,6 +22,28 @@
           }
         ]
       ]
+    },
+    "MongoDB1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-06-27T06:39:25.208Z",
@@ -37,17 +54,6 @@
   },
   "name": "test",
   "nodes": [
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        -320,
-        480
-      ],
-      "id": "1043ca25-b105-445c-9fb5-9d100ae72d93",
-      "name": "When clicking ‘Execute workflow’"
-    },
     {
       "parameters": {
         "assignments": {
@@ -246,7 +252,7 @@
       "credentials": {
         "mongoDb": {
           "id": "uKpjr544WS3Oo6zh",
-          "name": "MongoDB account"
+          "name": "MongoDB HomeHost"
         }
       }
     },
@@ -357,14 +363,14 @@
           "mode": "list",
           "cachedResultName": "models/gemini-2.0-flash-exp-image-generation"
         },
-        "prompt": "生成一张独眼小黄人的图片,手绘风格,透明背景",
+        "prompt": "=根据下列json数据,生成折线图.X轴按\"时间\"显示为时分(例:09:06),除\"_id\",\"时间\",\"源数据\"其他字段为legend, 字段值为Y轴,为\"光照度\"单独设置单位'lux'.\n{{ $json.allData.toJsonString() }}",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.googleGemini",
       "typeVersion": 1,
       "position": [
-        -592,
-        -128
+        -432,
+        80
       ],
       "id": "eef1e905-6956-4565-8d2a-b4fa94b39fa0",
       "name": "Generate an image",
@@ -372,6 +378,61 @@
         "googlePalmApi": {
           "id": "nhmY1teQyjDTFTIP",
           "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "collection": "global_variables",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.2,
+      "position": [
+        -880,
+        80
+      ],
+      "id": "c688c0c8-1527-4fa7-9a59-384e3f10a30b",
+      "name": "MongoDB1",
+      "alwaysOutputData": false,
+      "credentials": {
+        "mongoDb": {
+          "id": "Fzidi3QSrpr5jz68",
+          "name": "MongoDB ClawCloud"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 获取输入数据\nconst items = $input.all();\n\nreturn [\n  {\n    json: {\n      allData: items.map(item => item.json)\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -672,
+        80
+      ],
+      "id": "e805f30a-048a-4720-b49d-303b5e3e011b",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "msgtype": "markdown",
+        "title": "tetesn8n",
+        "markdownText": "etser"
+      },
+      "type": "n8n-nodes-dingtalk.dingTalkRobot",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        400
+      ],
+      "id": "d9873d89-9f23-43e5-b131-a7c415a7b504",
+      "name": "钉钉机器人",
+      "credentials": {
+        "dingTalkCustomRobotApi": {
+          "id": "ewEy0mraYFqwnuN2",
+          "name": "DingTalk - Automation"
         }
       }
     }
@@ -386,20 +447,6 @@
           }
         }
       }
-    ],
-    "When clicking ‘Execute workflow’": [
-      {
-        "json": {
-          "name": "First item",
-          "code": "k1"
-        }
-      },
-      {
-        "json": {
-          "name": "Second item",
-          "code": "k2"
-        }
-      }
     ]
   },
   "settings": {
@@ -408,6 +455,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-29T08:26:43.000Z",
-  "versionId": "6e109ebe-91b1-4c02-b6d7-1edd94270451"
+  "updatedAt": "2025-07-30T08:53:39.000Z",
+  "versionId": "b08547ae-df30-4a30-a344-4ddb36ec82d7"
 }
