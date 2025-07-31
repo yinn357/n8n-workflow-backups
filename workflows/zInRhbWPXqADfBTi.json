@@ -44,6 +44,39 @@
           }
         ]
       ]
+    },
+    "模拟数据": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "markdown-钉钉通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "模拟数据",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-06-27T06:39:25.208Z",
@@ -64,7 +97,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -224,
+        -880,
         -224
       ],
       "id": "8de8a0e1-d2cc-4332-996b-06af45a0eaca",
@@ -143,7 +176,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        0,
+        -656,
         -224
       ],
       "id": "5a37eff3-e76f-42c0-beb9-477d7b2fa519",
@@ -185,8 +218,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        32,
-        -48
+        -880,
+        0
       ],
       "id": "dd68b38e-b951-4d07-91d7-9654bcc1ee09",
       "name": "Execute Workflow"
@@ -200,8 +233,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        32,
-        160
+        -880,
+        448
       ],
       "id": "648d0b86-ecc4-4039-86a1-4df4844ea5ca",
       "name": "Redis",
@@ -221,8 +254,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        64,
-        368
+        -880,
+        672
       ],
       "id": "74b2f217-2e5f-4f87-997e-57b1288ef902",
       "name": "Redis1",
@@ -244,8 +277,8 @@
       "type": "n8n-nodes-base.mongoDb",
       "typeVersion": 1.2,
       "position": [
-        -48,
-        544
+        -880,
+        1120
       ],
       "id": "99e1932f-e3af-4451-bcaa-0b71ba6bc754",
       "name": "MongoDB",
@@ -265,8 +298,8 @@
       "type": "n8n-nodes-base.homeAssistant",
       "typeVersion": 1,
       "position": [
-        192,
-        544
+        -656,
+        1120
       ],
       "id": "9a7d248f-57d2-49ca-8b32-7a86cd568c50",
       "name": "Get many states",
@@ -283,14 +316,14 @@
           "__rl": true,
           "value": "4tHTAEVO9ryUxOhn",
           "mode": "list",
-          "cachedResultName": "钉钉通知"
+          "cachedResultName": "sub-钉钉通知"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
           "value": {
-            "content": "![](https://quickchart.io/chart/render/zf-2b07d0a9-cdac-46da-967d-6face7147cb4)",
-            "msgtype": "markdown",
-            "title": "test"
+            "msgtype": "text",
+            "title": "test",
+            "content": "={{ $json.buffer.toString() }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -348,8 +381,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        -208,
-        736
+        -464,
+        1600
       ],
       "id": "ccfeaa43-da2b-4f71-a3c5-10e11f6a9f7e",
       "name": "markdown-钉钉通知"
@@ -370,7 +403,7 @@
       "typeVersion": 1,
       "position": [
         -432,
-        80
+        224
       ],
       "id": "eef1e905-6956-4565-8d2a-b4fa94b39fa0",
       "name": "Generate an image",
@@ -390,7 +423,7 @@
       "typeVersion": 1.2,
       "position": [
         -880,
-        80
+        224
       ],
       "id": "c688c0c8-1527-4fa7-9a59-384e3f10a30b",
       "name": "MongoDB1",
@@ -409,8 +442,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -672,
-        80
+        -656,
+        224
       ],
       "id": "e805f30a-048a-4720-b49d-303b5e3e011b",
       "name": "Code"
@@ -425,7 +458,7 @@
       "typeVersion": 1,
       "position": [
         -880,
-        400
+        896
       ],
       "id": "d9873d89-9f23-43e5-b131-a7c415a7b504",
       "name": "钉钉机器人",
@@ -435,10 +468,69 @@
           "name": "DingTalk - Automation"
         }
       }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -912,
+        1600
+      ],
+      "id": "846fa17d-bb8a-4611-a72f-6a6a27a0b923",
+      "name": "模拟数据"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 获取全局静态数据\nconst staticData = $getWorkflowStaticData('global');\n\nif (!staticData.buffer) {\n  staticData.buffer = [];\n  staticData.last = Date.now();\n}\nstaticData.buffer.push(staticData.buffer.length)\n\nif (staticData.buffer.length>5) {\n  staticData.buffer = null;\n}\n\nreturn [{json:staticData}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -704,
+        1600
+      ],
+      "id": "738bcb39-2875-4d93-a5c6-a894adf74ee9",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "seconds",
+              "secondsInterval": 5
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1120,
+        1600
+      ],
+      "id": "11d3d680-c4b9-4d0b-9548-40b0688779ad",
+      "name": "Schedule Trigger"
     }
   ],
   "pinData": {
     "顶顶推送模拟数据": [
+      {
+        "json": {
+          "msgtype": "text",
+          "text": {
+            "content": "没有状态和名称的推送"
+          }
+        }
+      }
+    ],
+    "模拟数据": [
       {
         "json": {
           "msgtype": "text",
@@ -452,9 +544,21 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "staticData": null,
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    },
+    "global": {
+      "buffer": [
+        0,
+        1,
+        2
+      ],
+      "last": 1753945465081
+    }
+  },
   "tags": [],
-  "triggerCount": 0,
-  "updatedAt": "2025-07-30T08:53:39.000Z",
-  "versionId": "b08547ae-df30-4a30-a344-4ddb36ec82d7"
+  "triggerCount": 1,
+  "updatedAt": "2025-07-31T07:04:38.000Z",
+  "versionId": "00c5a43f-8bdf-40db-8854-b8ab73ca3cf3"
 }
