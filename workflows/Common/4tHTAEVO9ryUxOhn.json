@@ -226,7 +226,7 @@
     },
     {
       "parameters": {
-        "jsCode": "return $input.all().map(item => {\n  const data = item.json;\n  // 名称\n  let name = data.name || $workflow.name.replaceAll('sub-','');\n  // 状态\n  let state = data.state || '💬';\n  switch (state) {\n    case '失败':\n      state = state+'❌';\n      break;\n    case '成功':\n      state = state+'✅';\n      break;\n  }\n  \n  // 消息头\n  const msgHeader  = `${name}: ${state} - n8n Automation Notify\\n\\n`\n  // 内容\n  data.content = msgHeader + data.content;\n  data.title = data.title || '';\n  return { json: data };\n});\n"
+        "jsCode": "return $input.all().map(item => {\n  const data = item.json;\n  // type\n  const msgtypeMap = { md: 'markdown' };\n  data.msgtype = msgtypeMap[data.msgtype] || data.msgtype;\n\n  // 名称\n  let name = data.name || $workflow.name.replaceAll('sub-','');\n  // 状态\n  let state = data.state || '💬';\n  switch (state) {\n    case '失败':\n      state = state+'❌';\n      break;\n    case '成功':\n      state = state+'✅';\n      break;\n  }\n  \n  // 消息头\n  const msgHeader  = `${name}: ${state} - n8n Automation Notify\\n\\n`\n  // 内容\n  data.content = msgHeader + data.content;\n  data.title = data.title || '';\n  return { json: data };\n});\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -266,6 +266,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-07-30T09:09:41.000Z",
-  "versionId": "4e384e18-9495-40ee-a80c-34ee75b82892"
+  "updatedAt": "2025-07-31T06:49:56.000Z",
+  "versionId": "9fd3dd3c-4101-4557-8b2b-c4a41164e28e"
 }
