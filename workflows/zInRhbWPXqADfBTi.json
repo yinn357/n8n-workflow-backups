@@ -517,6 +517,24 @@
       ],
       "id": "11d3d680-c4b9-4d0b-9548-40b0688779ad",
       "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "chartType": "line",
+        "labelsMode": "array",
+        "labelsArray": "[1,2,3,4,5]",
+        "data": "[5,6,4,1,7]",
+        "chartOptions": {},
+        "datasetOptions": {}
+      },
+      "type": "n8n-nodes-base.quickChart",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "924c0a77-0cec-4060-8385-6dccb038eaf9",
+      "name": "QuickChart"
     }
   ],
   "pinData": {
@@ -559,6 +577,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2025-07-31T07:04:38.000Z",
-  "versionId": "00c5a43f-8bdf-40db-8854-b8ab73ca3cf3"
+  "updatedAt": "2025-08-01T02:59:33.000Z",
+  "versionId": "3c9609d1-3d2b-46d4-b43c-8ebd5321b232"
 }
