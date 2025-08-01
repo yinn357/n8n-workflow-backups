@@ -100,22 +100,22 @@
         ]
       ]
     },
-    "30分钟一次": {
+    "获取临时保存数据": {
       "main": [
         [
           {
-            "node": "获取临时保存数据",
+            "node": "toMarkdown内容",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "获取临时保存数据": {
+    "定时变量日志": {
       "main": [
         [
           {
-            "node": "toMarkdown内容",
+            "node": "获取临时保存数据",
             "type": "main",
             "index": 0
           }
@@ -366,7 +366,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        360,
+        368,
         192
       ],
       "typeVersion": 1,
@@ -455,7 +455,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// 获取全局静态数据\nconst staticData = $getWorkflowStaticData('global');\n\nif (!staticData.variableData) {\n  staticData.variableData = [];\n}\n// 缓存数据\n$input.all().map(item => {\n  staticData.variableData.push(item.json);\n})\n// 缓存数据大于条数返回 全部数据\nif (staticData.variableData.length >= 10) {\n  const output = staticData.variableData;\n  staticData.variableData = [];\n  // 返回 JSON 对象数组\n  return output.map(d => ({ json: d }));\n}\n\nreturn [];"
+        "jsCode": "// 获取全局静态数据\nconst staticData = $getWorkflowStaticData('global');\n\nif (!staticData.variableData) {\n  staticData.variableData = [];\n}\n// 缓存数据\n$input.all().map(item => {\n  staticData.variableData.push(item.json);\n})\n// 缓存数据大于条数返回 全部数据\nif (staticData.variableData.length >= 8) {\n  const output = staticData.variableData;\n  staticData.variableData = [];\n  // 返回 JSON 对象数组\n  return output.map(d => ({ json: d }));\n}\n\nreturn [];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -559,11 +559,24 @@
     },
     {
       "parameters": {
+        "jsCode": "// 获取全局静态数据\nconst staticData = $getWorkflowStaticData('global');\n\n// 缓存数据大于条数返回全部数据\nif (staticData?.variableData?.length > 0) {\n  const output = staticData.variableData;\n  staticData.variableData = null;\n  // 返回 JSON 对象数组\n  return output.map(d => ({ json: d }));\n}\n\nreturn [];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        592
+      ],
+      "id": "4d98ed40-5125-4a8e-984b-167973cc2ee7",
+      "name": "获取临时保存数据"
+    },
+    {
+      "parameters": {
         "rule": {
           "interval": [
             {
               "field": "minutes",
-              "minutesInterval": 30
+              "minutesInterval": 50
             }
           ]
         }
@@ -575,20 +588,7 @@
         592
       ],
       "id": "ff4a9ff1-b58d-4423-8fd5-308f3648e8c2",
-      "name": "30分钟一次"
-    },
-    {
-      "parameters": {
-        "jsCode": "// 获取全局静态数据\nconst staticData = $getWorkflowStaticData('global');\n\n// 缓存数据大于条数返回全部数据\nif (staticData?.variableData?.length > 0) {\n  const output = staticData.variableData;\n  staticData.variableData = null;\n  // 返回 JSON 对象数组\n  return output.map(d => ({ json: d }));\n}\n\nreturn [];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        880,
-        592
-      ],
-      "id": "4d98ed40-5125-4a8e-984b-167973cc2ee7",
-      "name": "获取临时保存数据"
+      "name": "定时变量日志"
     }
   ],
   "pinData": {
@@ -932,6 +932,9 @@
     },
     "node:30分钟一次": {
       "recurrenceRules": []
+    },
+    "node:定时变量日志": {
+      "recurrenceRules": []
     }
   },
   "tags": [
@@ -943,6 +946,6 @@
     }
   ],
   "triggerCount": 2,
-  "updatedAt": "2025-07-31T07:14:30.000Z",
-  "versionId": "d03a967d-a286-4384-918c-33c8726e5ad1"
+  "updatedAt": "2025-08-01T09:08:51.000Z",
+  "versionId": "31b71818-e99a-471a-8532-5a4f044cb155"
 }
