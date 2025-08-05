@@ -455,7 +455,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// 获取全局静态数据\nconst staticData = $getWorkflowStaticData('global');\n\nif (!staticData.variableData) {\n  staticData.variableData = [];\n}\n// 缓存数据\n$input.all().map(item => {\n  staticData.variableData.push(item.json);\n})\n// 缓存数据大于条数返回 全部数据\nif (staticData.variableData.length >= 8) {\n  const output = staticData.variableData;\n  staticData.variableData = [];\n  // 返回 JSON 对象数组\n  return output.map(d => ({ json: d }));\n}\n\nreturn [];"
+        "jsCode": "// 获取全局静态数据\nconst staticData = $getWorkflowStaticData('global');\n\nif (!staticData.variableData) {\n  staticData.variableData = [];\n}\n// 缓存数据\n$input.all().map(item => {\n  staticData.variableData.push(item.json);\n})\n// 缓存数据大于条数返回 全部数据\nif (staticData.variableData.length >= 10) {\n  const output = staticData.variableData;\n  staticData.variableData = [];\n  // 返回 JSON 对象数组\n  return output.map(d => ({ json: d }));\n}\n\nreturn [];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -576,7 +576,7 @@
           "interval": [
             {
               "field": "minutes",
-              "minutesInterval": 50
+              "minutesInterval": 100
             }
           ]
         }
@@ -946,6 +946,6 @@
     }
   ],
   "triggerCount": 2,
-  "updatedAt": "2025-08-01T09:08:51.000Z",
-  "versionId": "31b71818-e99a-471a-8532-5a4f044cb155"
+  "updatedAt": "2025-08-05T02:41:25.000Z",
+  "versionId": "397bb5b5-210a-4747-ad65-01ca490010bf"
 }
