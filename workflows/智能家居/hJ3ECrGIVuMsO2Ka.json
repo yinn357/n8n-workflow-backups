@@ -16,7 +16,7 @@
       "main": [
         [
           {
-            "node": "处理日期时间",
+            "node": "必要字段存在",
             "type": "main",
             "index": 0
           }
@@ -88,6 +88,17 @@
           }
         ]
       ]
+    },
+    "必要字段存在": {
+      "main": [
+        [
+          {
+            "node": "处理日期时间",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-07-25T03:45:21.562Z",
@@ -116,7 +127,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        128,
+        352,
         -80
       ],
       "id": "2da9ca2b-7318-4532-8c14-5462e64e96f7",
@@ -155,7 +166,7 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        352,
+        576,
         -96
       ],
       "id": "f4b1826e-4e5b-4f8c-b307-53b4911036eb",
@@ -171,7 +182,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         256,
-        -224
+        -240
       ],
       "typeVersion": 1,
       "id": "ef43bfce-168c-4340-ae9c-5d4dcf791bdb",
@@ -184,7 +195,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        576,
+        800,
         -80
       ],
       "id": "1990b53b-0f00-4699-8b7c-432a9f344cd0",
@@ -202,7 +213,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1024,
+        1248,
         -80
       ],
       "id": "636b29d4-5d46-45f5-9a01-5757cc2f3f87",
@@ -215,7 +226,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        800,
+        1024,
         -80
       ],
       "id": "12a5aac4-682e-4345-b67a-ca3e9a599cd9",
@@ -293,7 +304,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        1248,
+        1472,
         -80
       ],
       "id": "08377b1c-fa38-427c-ae0b-568473528112",
@@ -317,6 +328,60 @@
       ],
       "id": "8feea5b8-3eaf-402f-bf5a-911306dd337b",
       "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "506c2735-361e-4e91-9ca4-c3250e9fd354",
+              "leftValue": "={{ $json.entity_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "77f96273-9991-4121-9dff-ceec10ce4253",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "0ee9e30b-3328-4d81-9525-c53aca5cbf6a",
+              "leftValue": "={{ $json.state }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        128,
+        -80
+      ],
+      "id": "dd56b3a0-6f27-49db-96b5-16c170107311",
+      "name": "必要字段存在"
     }
   ],
   "pinData": {},
@@ -339,6 +404,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-07-30T06:44:31.000Z",
-  "versionId": "bb45168d-bb57-4a7b-a597-f6f26ad4b6ce"
+  "updatedAt": "2025-08-08T00:55:24.000Z",
+  "versionId": "d1123cee-8426-45ef-a0bb-abe7169a0b8a"
 }
