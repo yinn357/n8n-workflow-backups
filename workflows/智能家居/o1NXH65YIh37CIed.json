@@ -576,8 +576,7 @@
           "interval": [
             {
               "field": "hours",
-              "hoursInterval": 2,
-              "triggerAtMinute": 1
+              "hoursInterval": 2
             }
           ]
         }
@@ -949,6 +948,6 @@
     }
   ],
   "triggerCount": 2,
-  "updatedAt": "2025-08-06T12:10:36.000Z",
-  "versionId": "294f7e87-8fc9-4cc5-b099-606cccfb0e97"
+  "updatedAt": "2025-08-08T00:55:58.000Z",
+  "versionId": "2d932a72-81d9-4161-8aca-17d4568ba40e"
 }
