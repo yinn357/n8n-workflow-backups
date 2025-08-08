@@ -569,6 +569,42 @@
           "name": "Google Gemini(PaLM) Api account"
         }
       }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "value": "43907800",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "picx-images-hosting",
+          "mode": "list",
+          "cachedResultName": "picx-images-hosting",
+          "cachedResultUrl": "https://github.com/43907800/picx-images-hosting"
+        },
+        "filePath": "test/test.txt",
+        "fileContent": "文件提交测试,的二次",
+        "commitMessage": "test"
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        -144,
+        656
+      ],
+      "id": "d3d5c897-ac88-4e58-9141-6a9bed6588da",
+      "name": "Edit a file",
+      "webhookId": "b0c9d976-2e4f-4a1b-96d3-eaf2f916b1bf",
+      "credentials": {
+        "githubApi": {
+          "id": "5yXdJEEUwoR8TUQe",
+          "name": "43907800 GitHub account"
+        }
+      }
     }
   ],
   "pinData": {
@@ -749,6 +785,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2025-08-05T03:56:44.000Z",
-  "versionId": "32ad42f2-c4dc-4392-a7e1-249ab23c4670"
+  "updatedAt": "2025-08-08T08:04:18.000Z",
+  "versionId": "7b11c377-1865-4cec-a808-a0963a93a67f"
 }
