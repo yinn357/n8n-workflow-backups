@@ -61,61 +61,28 @@
       "main": [
         [
           {
-            "node": "临时保存数据",
+            "node": "保存到SQLite",
             "type": "main",
             "index": 0
           },
           {
-            "node": "保存到n8n.global_variables",
+            "node": "保存SQLite临时表",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "保存到n8n.global_variables": {
+    "保存到SQLite": {
       "main": [
         []
       ]
     },
-    "临时保存数据": {
+    "保存SQLite临时表": {
       "main": [
         [
           {
-            "node": "toMarkdown内容",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "toMarkdown内容": {
-      "main": [
-        [
-          {
-            "node": "md-钉钉通知",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "获取临时保存数据": {
-      "main": [
-        [
-          {
-            "node": "toMarkdown内容",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "定时变量日志": {
-      "main": [
-        [
-          {
-            "node": "获取临时保存数据",
+            "node": "触发通知-子流程",
             "type": "main",
             "index": 0
           }
@@ -139,7 +106,7 @@
       "typeVersion": 1,
       "position": [
         -16,
-        208
+        112
       ],
       "id": "841c99f0-c59e-4f26-b4fe-66f4af34ce6f",
       "name": "接收中枢虚拟事件",
@@ -186,7 +153,7 @@
       "typeVersion": 3.4,
       "position": [
         208,
-        208
+        112
       ],
       "id": "b5147c52-b458-4cbe-86ed-8b4dee9528e5",
       "name": "必要字段"
@@ -263,7 +230,7 @@
       "typeVersion": 1.2,
       "position": [
         656,
-        16
+        -80
       ],
       "id": "24beb4d6-db30-4ce4-96e9-39ced468bb00",
       "name": "钉钉通知"
@@ -292,7 +259,7 @@
       "typeVersion": 1.2,
       "position": [
         656,
-        400
+        304
       ],
       "id": "c2999fa4-8367-4f8e-bce0-872511a60a5b",
       "name": "电脑Wol网络唤醒"
@@ -354,7 +321,7 @@
       "typeVersion": 3.2,
       "position": [
         432,
-        304
+        208
       ],
       "id": "fa7d110e-9543-4a40-ae26-56c2cbc692e4",
       "name": "具体事件判断"
@@ -366,8 +333,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        368,
-        192
+        360,
+        96
       ],
       "typeVersion": 1,
       "id": "50ea6ca2-ec2c-4228-96f2-88876b362811",
@@ -410,7 +377,7 @@
       "typeVersion": 2.2,
       "position": [
         432,
-        16
+        -80
       ],
       "id": "6a6e9237-75fd-42d0-962b-05ea25f7621a",
       "name": "\"HA_\"事件"
@@ -423,126 +390,57 @@
       "typeVersion": 2,
       "position": [
         656,
-        208
+        112
       ],
       "id": "0aeb7359-b270-4db9-bbe5-0a10f5019b96",
       "name": "全局变量处理"
     },
     {
       "parameters": {
-        "operation": "insert",
-        "collection": "global_variables",
-        "fields": "={{ $json.keys.join() }}",
-        "options": {
-          "useDotNotation": true
-        }
+        "db_path": "/files/database/home-assistant.db",
+        "query_type": "INSERT",
+        "query": "=INSERT INTO global_variables ({{ $json.keys.map(item => `\\`${item}\\``).join(\", \") }}) \nVALUES ({{ $json.keys.map(item => `$${item}`).join(\", \") }})",
+        "args": "={{Object.fromEntries(Object.entries($json).map(([key, value]) => [`$${key}`, value])).toJsonString() }}\n"
       },
-      "type": "n8n-nodes-base.mongoDb",
-      "typeVersion": 1.2,
+      "type": "n8n-nodes-sqlite3.sqliteNode",
+      "typeVersion": 1,
       "position": [
         880,
-        112
+        16
       ],
-      "id": "14d4ee35-e176-4796-a5f4-f1c07dcfa0a9",
-      "name": "保存到n8n.global_variables",
-      "alwaysOutputData": false,
-      "credentials": {
-        "mongoDb": {
-          "id": "Fzidi3QSrpr5jz68",
-          "name": "MongoDB ClawCloud"
-        }
-      }
+      "id": "d0f84c78-28cb-4dce-ba55-37e8f93aa58c",
+      "name": "保存到SQLite"
     },
     {
       "parameters": {
-        "jsCode": "// 获取全局静态数据\nconst staticData = $getWorkflowStaticData('global');\n\nif (!staticData.variableData) {\n  staticData.variableData = [];\n}\n// 缓存数据\n$input.all().map(item => {\n  staticData.variableData.push(item.json);\n})\n// 缓存数据大于条数返回 全部数据\nif (staticData.variableData.length >= 10) {\n  const output = staticData.variableData;\n  staticData.variableData = [];\n  // 返回 JSON 对象数组\n  return output.map(d => ({ json: d }));\n}\n\nreturn [];"
+        "db_path": "/files/database/home-assistant.db",
+        "query_type": "INSERT",
+        "query": "=INSERT INTO global_variables_temp ({{ $json.keys.map(item => `\\`${item}\\``).join(\", \") }}) \nVALUES ({{ $json.keys.map(item => `$${item}`).join(\", \") }})",
+        "args": "={{Object.fromEntries(Object.entries($json).map(([key, value]) => [`$${key}`, value])).toJsonString() }}\n"
       },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "type": "n8n-nodes-sqlite3.sqliteNode",
+      "typeVersion": 1,
       "position": [
         880,
-        304
+        208
       ],
-      "id": "bf6f1a61-59d4-409a-bc31-ef4d7b40da6b",
-      "name": "临时保存数据"
-    },
-    {
-      "parameters": {
-        "jsCode": "/**\n * 将数据数组转换成 Markdown Table 格式\n */\nfunction toMarkdownTable(jsonArray, ignoreFields = []) {\n  const headers = Object.keys(jsonArray[0].json).filter(h => !ignoreFields.includes(h));\n  const headerRow = '| ' + headers.join(' | ') + ' |';\n  const separatorRow = '| ' + headers.map(() => '---').join(' | ') + ' |';\n\n  const dataRows = jsonArray.map(obj =>\n    '| ' + headers.map(h => String(obj.json[h]).replace(/\\|/g, '\\\\|')).join(' | ') + ' |'\n  );\n\n  return [headerRow, separatorRow, ...dataRows].join('\\n');\n}\nconst ignoreFields = ['源数据', '_id', 'id', 'keys'];\nlet tableMd = toMarkdownTable($input.all(), ignoreFields);\n\n/**\n * 将数据数组转换成 Markdown 形式：\n * ### HH:MM\n * - 人: x    灯: y    器: z\n */\nfunction toSimpleMd(data) {\n  return data.map(item => {\n    const json = item.json\n    // 截取时间中的时:分\n    const hhmm = json['时间'].slice(11, 16);\n    const people = json['有人'];\n    const lamps  = json['灯光数量'];\n    const devices= json['家电数量'];\n    // return `### ${hhmm}\\n- 人: ${people}\\t灯: ${lamps}\\t器: ${devices}`;\n    return `- 🕦${hhmm} 🧍‍${people} 💡${lamps} 🔌${devices}`;\n  }).join('\\n');\n}\n\nlet listMd = toSimpleMd($input.all());\nreturn [{\n  json:{tableMd,listMd}\n}]"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        1104,
-        496
-      ],
-      "id": "8de95d8e-ba2d-4535-a54d-e7ac1437cb04",
-      "name": "toMarkdown内容"
+      "id": "58ce020e-20ea-411a-ba6f-551795301f28",
+      "name": "保存SQLite临时表",
+      "executeOnce": false
     },
     {
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "4tHTAEVO9ryUxOhn",
+          "value": "HzX7RQwnAmi0BSgQ",
           "mode": "list",
-          "cachedResultName": "sub-钉钉通知"
+          "cachedResultName": "HA全局变量-定时通知"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
-          "value": {
-            "msgtype": "md",
-            "content": "={{ $json.listMd }}",
-            "title": "米家变量记录",
-            "name": "米家变量记录"
-          },
+          "value": {},
           "matchingColumns": [],
-          "schema": [
-            {
-              "id": "msgtype",
-              "displayName": "msgtype",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string"
-            },
-            {
-              "id": "content",
-              "displayName": "content",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string"
-            },
-            {
-              "id": "title",
-              "displayName": "title",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string"
-            },
-            {
-              "id": "name",
-              "displayName": "name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string"
-            },
-            {
-              "id": "state",
-              "displayName": "state",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string"
-            }
-          ],
+          "schema": [],
           "attemptToConvertTypes": false,
           "convertFieldsToString": true
         },
@@ -551,378 +449,14 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        1328,
-        496
+        1104,
+        208
       ],
-      "id": "ecf97f1b-eec0-4d3a-bd45-70819a472045",
-      "name": "md-钉钉通知"
-    },
-    {
-      "parameters": {
-        "jsCode": "// 获取全局静态数据\nconst staticData = $getWorkflowStaticData('global');\n\n// 缓存数据大于条数返回全部数据\nif (staticData?.variableData?.length > 0) {\n  const output = staticData.variableData;\n  staticData.variableData = null;\n  // 返回 JSON 对象数组\n  return output.map(d => ({ json: d }));\n}\n\nreturn [];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        880,
-        592
-      ],
-      "id": "4d98ed40-5125-4a8e-984b-167973cc2ee7",
-      "name": "获取临时保存数据"
-    },
-    {
-      "parameters": {
-        "rule": {
-          "interval": [
-            {
-              "field": "hours",
-              "hoursInterval": 2
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.scheduleTrigger",
-      "typeVersion": 1.2,
-      "position": [
-        656,
-        592
-      ],
-      "id": "ff4a9ff1-b58d-4423-8fd5-308f3648e8c2",
-      "name": "定时变量日志"
+      "id": "49c6f62c-4d95-4521-ac5c-54fb3d564a93",
+      "name": "触发通知-子流程"
     }
   ],
-  "pinData": {
-    "接收中枢虚拟事件": [
-      {
-        "json": {
-          "event_type": "state_changed",
-          "data": {
-            "entity_id": "event.xiaomi_cn_1079853347_hub1_virtual_event_e_4_1",
-            "old_state": {
-              "entity_id": "event.xiaomi_cn_1079853347_hub1_virtual_event_e_4_1",
-              "state": "2025-07-30T03:13:54.739+00:00",
-              "attributes": {
-                "event_types": [
-                  "虚拟事件发生"
-                ],
-                "event_type": "虚拟事件发生",
-                "事件名称": "HA_全局变量1-平均光照度: 173|光照度: 359.627136|天亮: 1|有人: 1|睡眠: 0|灯光数量: 0|书房电脑: 0|家电数量: 1",
-                "friendly_name": "中枢网关  虚拟服务 虚拟事件发生"
-              },
-              "last_changed": "2025-07-30T03:13:54.739094+00:00",
-              "last_reported": "2025-07-30T03:13:54.739094+00:00",
-              "last_updated": "2025-07-30T03:13:54.739094+00:00",
-              "context": {
-                "id": "01K1CN4Z1KR1421W5RHPTF7FFP",
-                "parent_id": null,
-                "user_id": null
-              }
-            },
-            "new_state": {
-              "entity_id": "event.xiaomi_cn_1079853347_hub1_virtual_event_e_4_1",
-              "state": "2025-07-30T03:14:17.532+00:00",
-              "attributes": {
-                "event_types": [
-                  "虚拟事件发生"
-                ],
-                "event_type": "虚拟事件发生",
-                "事件名称": "HA_全局变量-平均光照度: 193|光照度: 449.598816|天亮: 1|有人: 1|睡眠: 0|灯光数量: 0|书房电脑: 0|家电数量: 1",
-                "friendly_name": "中枢网关  虚拟服务 虚拟事件发生"
-              },
-              "last_changed": "2025-07-30T03:14:17.532813+00:00",
-              "last_reported": "2025-07-30T03:14:17.532813+00:00",
-              "last_updated": "2025-07-30T03:14:17.532813+00:00",
-              "context": {
-                "id": "01K1CN5N9WHDYQWK2JTK2B5NZH",
-                "parent_id": null,
-                "user_id": null
-              }
-            }
-          },
-          "origin": "LOCAL",
-          "time_fired": "2025-07-30T03:14:17.532813+00:00",
-          "context": {
-            "id": "01K1CN5N9WHDYQWK2JTK2B5NZH",
-            "parent_id": null,
-            "user_id": null
-          },
-          "timestamp": "2025-07-30T03:14:17.538Z"
-        }
-      }
-    ],
-    "必要字段": [
-      {
-        "json": {
-          "event_type": "虚拟事件发生",
-          "event_name": "HA_全局变量-平均光照度: 193|光照度: 449.598816|天亮: 1|有人: 1|睡眠: 0|灯光数量: 0|书房电脑: 0|家电数量: 1",
-          "creat_time": "2025-07-30T03:14:17.538Z",
-          "friendly_name": "中枢网关  虚拟服务 虚拟事件发生"
-        }
-      }
-    ],
-    "全局变量处理": [
-      {
-        "json": {
-          "keys": [
-            "平均光照度",
-            "光照度",
-            "天亮",
-            "有人",
-            "睡眠",
-            "灯光数量",
-            "书房电脑",
-            "家电数量",
-            "时间",
-            "源数据"
-          ],
-          "平均光照度": 193,
-          "光照度": 449.598816,
-          "天亮": 1,
-          "有人": 1,
-          "睡眠": 0,
-          "灯光数量": 0,
-          "书房电脑": 0,
-          "家电数量": 1,
-          "时间": "2025-07-30 11:14:17",
-          "源数据": "HA_全局变量-平均光照度: 193|光照度: 449.598816|天亮: 1|有人: 1|睡眠: 0|灯光数量: 0|书房电脑: 0|家电数量: 1"
-        }
-      },
-      {
-        "json": {
-          "keys": [
-            "平均光照度",
-            "光照度",
-            "天亮",
-            "有人",
-            "睡眠",
-            "灯光数量",
-            "书房电脑",
-            "家电数量",
-            "时间",
-            "源数据"
-          ],
-          "平均光照度": 193,
-          "光照度": 449.598816,
-          "天亮": 1,
-          "有人": 1,
-          "睡眠": 0,
-          "灯光数量": 0,
-          "书房电脑": 0,
-          "家电数量": 1,
-          "时间": "2025-07-30 11:14:17",
-          "源数据": "HA_全局变量-平均光照度: 193|光照度: 449.598816|天亮: 1|有人: 1|睡眠: 0|灯光数量: 0|书房电脑: 0|家电数量: 1"
-        }
-      },
-      {
-        "json": {
-          "keys": [
-            "平均光照度",
-            "光照度",
-            "天亮",
-            "有人",
-            "睡眠",
-            "灯光数量",
-            "书房电脑",
-            "家电数量",
-            "时间",
-            "源数据"
-          ],
-          "平均光照度": 193,
-          "光照度": 449.598816,
-          "天亮": 1,
-          "有人": 1,
-          "睡眠": 0,
-          "灯光数量": 0,
-          "书房电脑": 0,
-          "家电数量": 1,
-          "时间": "2025-07-30 11:14:17",
-          "源数据": "HA_全局变量-平均光照度: 193|光照度: 449.598816|天亮: 1|有人: 1|睡眠: 0|灯光数量: 0|书房电脑: 0|家电数量: 1"
-        }
-      },
-      {
-        "json": {
-          "keys": [
-            "平均光照度",
-            "光照度",
-            "天亮",
-            "有人",
-            "睡眠",
-            "灯光数量",
-            "书房电脑",
-            "家电数量",
-            "时间",
-            "源数据"
-          ],
-          "平均光照度": 193,
-          "光照度": 449.598816,
-          "天亮": 1,
-          "有人": 1,
-          "睡眠": 0,
-          "灯光数量": 0,
-          "书房电脑": 0,
-          "家电数量": 1,
-          "时间": "2025-07-30 11:14:17",
-          "源数据": "HA_全局变量-平均光照度: 193|光照度: 449.598816|天亮: 1|有人: 1|睡眠: 0|灯光数量: 0|书房电脑: 0|家电数量: 1"
-        }
-      },
-      {
-        "json": {
-          "keys": [
-            "平均光照度",
-            "光照度",
-            "天亮",
-            "有人",
-            "睡眠",
-            "灯光数量",
-            "书房电脑",
-            "家电数量",
-            "时间",
-            "源数据"
-          ],
-          "平均光照度": 193,
-          "光照度": 449.598816,
-          "天亮": 1,
-          "有人": 1,
-          "睡眠": 0,
-          "灯光数量": 0,
-          "书房电脑": 0,
-          "家电数量": 1,
-          "时间": "2025-07-30 11:14:17",
-          "源数据": "HA_全局变量-平均光照度: 193|光照度: 449.598816|天亮: 1|有人: 1|睡眠: 0|灯光数量: 0|书房电脑: 0|家电数量: 1"
-        }
-      },
-      {
-        "json": {
-          "keys": [
-            "平均光照度",
-            "光照度",
-            "天亮",
-            "有人",
-            "睡眠",
-            "灯光数量",
-            "书房电脑",
-            "家电数量",
-            "时间",
-            "源数据"
-          ],
-          "平均光照度": 193,
-          "光照度": 449.598816,
-          "天亮": 1,
-          "有人": 1,
-          "睡眠": 0,
-          "灯光数量": 0,
-          "书房电脑": 0,
-          "家电数量": 1,
-          "时间": "2025-07-30 11:14:17",
-          "源数据": "HA_全局变量-平均光照度: 193|光照度: 449.598816|天亮: 1|有人: 1|睡眠: 0|灯光数量: 0|书房电脑: 0|家电数量: 1"
-        }
-      },
-      {
-        "json": {
-          "keys": [
-            "平均光照度",
-            "光照度",
-            "天亮",
-            "有人",
-            "睡眠",
-            "灯光数量",
-            "书房电脑",
-            "家电数量",
-            "时间",
-            "源数据"
-          ],
-          "平均光照度": 193,
-          "光照度": 449.598816,
-          "天亮": 1,
-          "有人": 1,
-          "睡眠": 0,
-          "灯光数量": 0,
-          "书房电脑": 0,
-          "家电数量": 1,
-          "时间": "2025-07-30 11:14:17",
-          "源数据": "HA_全局变量-平均光照度: 193|光照度: 449.598816|天亮: 1|有人: 1|睡眠: 0|灯光数量: 0|书房电脑: 0|家电数量: 1"
-        }
-      },
-      {
-        "json": {
-          "keys": [
-            "平均光照度",
-            "光照度",
-            "天亮",
-            "有人",
-            "睡眠",
-            "灯光数量",
-            "书房电脑",
-            "家电数量",
-            "时间",
-            "源数据"
-          ],
-          "平均光照度": 193,
-          "光照度": 449.598816,
-          "天亮": 1,
-          "有人": 1,
-          "睡眠": 0,
-          "灯光数量": 0,
-          "书房电脑": 0,
-          "家电数量": 1,
-          "时间": "2025-07-30 11:14:17",
-          "源数据": "HA_全局变量-平均光照度: 193|光照度: 449.598816|天亮: 1|有人: 1|睡眠: 0|灯光数量: 0|书房电脑: 0|家电数量: 1"
-        }
-      },
-      {
-        "json": {
-          "keys": [
-            "平均光照度",
-            "光照度",
-            "天亮",
-            "有人",
-            "睡眠",
-            "灯光数量",
-            "书房电脑",
-            "家电数量",
-            "时间",
-            "源数据"
-          ],
-          "平均光照度": 193,
-          "光照度": 449.598816,
-          "天亮": 1,
-          "有人": 1,
-          "睡眠": 0,
-          "灯光数量": 0,
-          "书房电脑": 0,
-          "家电数量": 1,
-          "时间": "2025-07-30 11:14:17",
-          "源数据": "HA_全局变量-平均光照度: 193|光照度: 449.598816|天亮: 1|有人: 1|睡眠: 0|灯光数量: 0|书房电脑: 0|家电数量: 1"
-        }
-      },
-      {
-        "json": {
-          "keys": [
-            "平均光照度",
-            "光照度",
-            "天亮",
-            "有人",
-            "睡眠",
-            "灯光数量",
-            "书房电脑",
-            "家电数量",
-            "时间",
-            "源数据"
-          ],
-          "平均光照度": 193,
-          "光照度": 449.598816,
-          "天亮": 1,
-          "有人": 1,
-          "睡眠": 0,
-          "灯光数量": 0,
-          "书房电脑": 0,
-          "家电数量": 1,
-          "时间": "2025-07-30 11:14:17",
-          "源数据": "HA_全局变量-平均光照度: 193|光照度: 449.598816|天亮: 1|有人: 1|睡眠: 0|灯光数量: 0|书房电脑: 0|家电数量: 1"
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "settings": {
     "executionOrder": "v1"
   },
@@ -935,7 +469,7 @@
     },
     "node:定时变量日志": {
       "recurrenceRules": [
-        6
+        10
       ]
     }
   },
@@ -947,7 +481,7 @@
       "name": "智能家居"
     }
   ],
-  "triggerCount": 2,
-  "updatedAt": "2025-08-08T00:55:58.000Z",
-  "versionId": "2d932a72-81d9-4161-8aca-17d4568ba40e"
+  "triggerCount": 1,
+  "updatedAt": "2025-08-14T09:40:40.000Z",
+  "versionId": "15907dd4-15dc-47ef-b68b-b0da517a67a4"
 }
