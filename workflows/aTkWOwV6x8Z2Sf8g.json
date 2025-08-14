@@ -1,0 +1,120 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Global Constants",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Global Constants": {
+      "main": [
+        [
+          {
+            "node": "Sqlite 建表",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Sqlite Node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-14T01:22:45.471Z",
+  "id": "aTkWOwV6x8Z2Sf8g",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SQLite",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        -352
+      ],
+      "id": "5eaef027-b7c9-4a77-bbe7-21bfaeb7f6cb",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "constantsKeyName": "data"
+      },
+      "type": "n8n-nodes-globals.globalConstants",
+      "typeVersion": 1,
+      "position": [
+        -144,
+        -352
+      ],
+      "id": "d8a00ebb-7476-4018-8c5f-cffe500cf381",
+      "name": "Global Constants",
+      "credentials": {
+        "globalConstantsApi": {
+          "id": "HaWhGgHL2UcweHq8",
+          "name": "Global Constants account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "db_path": "={{ $json.data.ha_db }}",
+        "query_type": "CREATE",
+        "query": "CREATE TABLE global_variables_temp (\n    `平均光照度` INTEGER,\n    `光照度` REAL,\n    `天亮` INTEGER,\n    `有人` INTEGER,\n    `睡眠` INTEGER,\n    `灯光数量` INTEGER,\n    `书房电脑` INTEGER,\n    `家电数量` INTEGER,\n    `时间` TEXT\n);\n"
+      },
+      "type": "n8n-nodes-sqlite3.sqliteNode",
+      "typeVersion": 1,
+      "position": [
+        80,
+        -384
+      ],
+      "id": "580d38ad-3ec1-4600-ae6d-2f12fd845c1e",
+      "name": "Sqlite 建表",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "db_path": "={{ $json.data.ha_db }}",
+        "query": "select COUNT(1) num from global_variables_temp"
+      },
+      "type": "n8n-nodes-sqlite3.sqliteNode",
+      "typeVersion": 1,
+      "position": [
+        64,
+        -208
+      ],
+      "id": "6cefc25c-f53b-4de2-a1c9-02cb5795a182",
+      "name": "Sqlite Node"
+    }
+  ],
+  "pinData": {
+    "Global Constants": [
+      {
+        "json": {
+          "data": {
+            "ha_db": "/files/database/home-assistant.db"
+          }
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-14T03:16:30.000Z",
+  "versionId": "27fd1040-4947-45cd-a388-912222026010"
+}
