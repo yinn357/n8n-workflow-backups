@@ -19,11 +19,6 @@
             "node": "查询临时表",
             "type": "main",
             "index": 0
-          },
-          {
-            "node": "Global Constants",
-            "type": "main",
-            "index": 0
           }
         ]
       ]
@@ -96,7 +91,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        608,
+        768,
         -112
       ],
       "id": "e195b2e8-1d01-42ff-b629-2d84f55f0757",
@@ -174,7 +169,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        832,
+        992,
         -112
       ],
       "id": "9b983ebc-412e-4454-aba5-1c3236ed5da8",
@@ -195,15 +190,15 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
-        -112,
-        -304
+        320,
+        -112
       ],
       "id": "827a3468-f7cc-4040-96c2-446c29addebf",
       "name": "定时变量日志"
     },
     {
       "parameters": {
-        "db_path": "={{ $node[\"Global Constants\"].json.data.ha_db }}",
+        "db_path": "=/files/database/home-assistant.db",
         "query_type": "SELECT",
         "query": "SELECT * FROM global_variables_temp",
         "spread": true
@@ -211,7 +206,7 @@
       "type": "n8n-nodes-sqlite3.sqliteNode",
       "typeVersion": 1,
       "position": [
-        384,
+        544,
         -208
       ],
       "id": "29d18ef5-f867-498b-ba25-eb06365b4878",
@@ -220,33 +215,14 @@
     },
     {
       "parameters": {
-        "constantsKeyName": "data"
-      },
-      "type": "n8n-nodes-globals.globalConstants",
-      "typeVersion": 1,
-      "position": [
-        192,
-        -352
-      ],
-      "id": "09261402-c4f3-4a10-908a-7bfd58bc916e",
-      "name": "Global Constants",
-      "credentials": {
-        "globalConstantsApi": {
-          "id": "HaWhGgHL2UcweHq8",
-          "name": "Global Constants account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "db_path": "={{ $node[\"Global Constants\"].json.data.ha_db }}",
+        "db_path": "=/files/database/home-assistant.db",
         "query_type": "DELETE",
         "query": "DELETE FROM global_variables_temp"
       },
       "type": "n8n-nodes-sqlite3.sqliteNode",
       "typeVersion": 1,
       "position": [
-        608,
+        768,
         -304
       ],
       "id": "a8bf38e7-8907-4588-9384-db23bc3ac1d5",
@@ -256,16 +232,19 @@
     {
       "parameters": {
         "db_path": "/files/database/home-assistant.db",
-        "query": "select COUNT(1) num from global_variables_temp"
+        "query_type": "SELECT",
+        "query": "select COUNT(1) num from global_variables_temp",
+        "spread": true
       },
       "type": "n8n-nodes-sqlite3.sqliteNode",
       "typeVersion": 1,
       "position": [
-        32,
-        -128
+        96,
+        -304
       ],
       "id": "83221407-6066-4267-be16-47ceecb23391",
-      "name": "查询临时表条数"
+      "name": "查询临时表条数",
+      "executeOnce": true
     },
     {
       "parameters": {
@@ -294,8 +273,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        192,
-        -128
+        320,
+        -304
       ],
       "id": "3d42af4a-4dda-4c33-93a7-9abe750941ef",
       "name": "条数大于10"
@@ -308,32 +287,13 @@
       "typeVersion": 1.1,
       "position": [
         -128,
-        -128
+        -304
       ],
       "id": "b7973840-ff97-4285-aac4-e31c5d14b223",
       "name": "子流程触发"
     }
   ],
-  "pinData": {
-    "Global Constants": [
-      {
-        "json": {
-          "event_type": "state_changed",
-          "data": {
-            "ha_db": "/files/database/home-assistant.db"
-          },
-          "origin": "LOCAL",
-          "time_fired": "2025-07-30T03:14:17.532813+00:00",
-          "context": {
-            "id": "01K1CN5N9WHDYQWK2JTK2B5NZH",
-            "parent_id": null,
-            "user_id": null
-          },
-          "timestamp": "2025-07-30T03:14:17.538Z"
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "settings": {
     "executionOrder": "v1"
   },
@@ -359,6 +319,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-08-14T09:41:07.000Z",
-  "versionId": "1bc0e5c8-56a0-4710-b56c-dc92bc9f858a"
+  "updatedAt": "2025-08-15T00:47:45.000Z",
+  "versionId": "ff6843df-283e-4fef-ac51-056d5d3668c8"
 }
