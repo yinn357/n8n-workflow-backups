@@ -390,6 +390,15 @@
     "timezone": "Asia/Shanghai",
     "callerPolicy": "workflowsFromSameOwner"
   },
+  "shared": [
+    {
+      "createdAt": "2025-07-25T03:45:21.580Z",
+      "updatedAt": "2025-07-25T03:45:21.580Z",
+      "role": "workflow:owner",
+      "workflowId": "hJ3ECrGIVuMsO2Ka",
+      "projectId": "BeX3bor8ts20lbDK"
+    }
+  ],
   "staticData": {
     "node:Schedule Trigger": {
       "recurrenceRules": []
