@@ -297,6 +297,15 @@
   "settings": {
     "executionOrder": "v1"
   },
+  "shared": [
+    {
+      "createdAt": "2025-08-14T02:48:24.586Z",
+      "updatedAt": "2025-08-14T02:48:24.586Z",
+      "role": "workflow:owner",
+      "workflowId": "HzX7RQwnAmi0BSgQ",
+      "projectId": "BeX3bor8ts20lbDK"
+    }
+  ],
   "staticData": {
     "node:定时变量日志": {
       "recurrenceRules": [
