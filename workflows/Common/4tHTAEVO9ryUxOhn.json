@@ -256,6 +256,15 @@
     "timezone": "Asia/Shanghai",
     "callerPolicy": "workflowsFromSameOwner"
   },
+  "shared": [
+    {
+      "createdAt": "2025-06-27T04:05:59.496Z",
+      "updatedAt": "2025-06-27T04:05:59.496Z",
+      "role": "workflow:owner",
+      "workflowId": "4tHTAEVO9ryUxOhn",
+      "projectId": "BeX3bor8ts20lbDK"
+    }
+  ],
   "staticData": null,
   "tags": [
     {
