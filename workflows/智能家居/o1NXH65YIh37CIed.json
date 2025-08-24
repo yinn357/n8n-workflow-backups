@@ -460,6 +460,15 @@
   "settings": {
     "executionOrder": "v1"
   },
+  "shared": [
+    {
+      "createdAt": "2025-07-03T09:20:18.608Z",
+      "updatedAt": "2025-07-03T09:20:18.608Z",
+      "role": "workflow:owner",
+      "workflowId": "o1NXH65YIh37CIed",
+      "projectId": "BeX3bor8ts20lbDK"
+    }
+  ],
   "staticData": {
     "global": {
       "variableData": null
