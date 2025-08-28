@@ -96,6 +96,20 @@
       ],
       "id": "6cefc25c-f53b-4de2-a1c9-02cb5795a182",
       "name": "Sqlite Node"
+    },
+    {
+      "parameters": {
+        "db_path": "/files/sgcc/sgcc_electricity.db",
+        "query": "select * from daily4350001385378 ORDER BY date DESC LIMIT 3 "
+      },
+      "type": "n8n-nodes-sqlite3.sqliteNode",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        -80
+      ],
+      "id": "859ffaa8-5c74-4fde-961e-fac1d477f928",
+      "name": "国家电网数据"
     }
   ],
   "pinData": {
@@ -124,6 +138,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-08-14T03:16:30.000Z",
-  "versionId": "27fd1040-4947-45cd-a388-912222026010"
+  "updatedAt": "2025-08-28T11:21:46.000Z",
+  "versionId": "014c8c4c-9215-43da-9ee6-bb08a84a292a"
 }
