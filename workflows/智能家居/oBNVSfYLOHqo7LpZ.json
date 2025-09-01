@@ -1,0 +1,255 @@
+{
+  "active": true,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "查询电网Sqlite",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "查询电网Sqlite": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "生成图标": {
+      "main": [
+        [
+          {
+            "node": "markdown-钉钉通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "生成图标",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "每三天9点10": {
+      "main": [
+        [
+          {
+            "node": "查询电网Sqlite",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-01T02:14:45.623Z",
+  "id": "oBNVSfYLOHqo7LpZ",
+  "isArchived": false,
+  "meta": null,
+  "name": "用电量图表",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -544,
+        -192
+      ],
+      "id": "32531393-0082-4830-ac3c-21af09f7cae5",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "db_path": "/files/sgcc/sgcc_electricity.db",
+        "query_type": "SELECT",
+        "query": "SELECT * FROM daily4350001385378 ORDER BY date DESC LIMIT 7",
+        "spread": true
+      },
+      "type": "n8n-nodes-sqlite3.sqliteNode",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        -96
+      ],
+      "id": "13fd6197-3da1-4048-8958-4c51921d6883",
+      "name": "查询电网Sqlite"
+    },
+    {
+      "parameters": {
+        "jsCode": "const labels = [];\nconst data = [];\n$input.all().reverse().forEach(item=>{\n  let label = item.json.date.substring(5);\n  labels.push(label);\n  data.push(item.json.usage);\n})\nlet title = labels[0] +' ~ '+ labels[labels.length-1] +' 用电情况'\nreturn [{json:{\n    \"width\": 600,\n    \"height\": 300,\n    // \"format\": \"base64\",\n    \"chart\":{\n      \"type\": \"bar\",\n      \"data\": {\n        \"labels\": labels,\n        \"datasets\": [\n          {\n            \"label\": title,\n            \"data\": data,\n            backgroundColor: 'rgba(54, 162, 235, 0.5)',\n            borderColor: 'rgb(54, 162, 235)',\n            borderWidth: 1\n          }\n        ]\n      },\n      options: {\n        plugins: {\n          \"roundedBars\": true ,\n          datalabels: {\n            anchor: 'center',\n            align: 'center',\n            color: '#666',\n            font: {\n              weight: 'normal',\n            },\n          },\n        },\n      },\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -96,
+        -96
+      ],
+      "id": "80e76f6c-3fbe-4d74-a273-4b7771639403",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://quickchart.io/chart/create",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        128,
+        -96
+      ],
+      "id": "1eeeb0b3-dc42-4c6c-a857-86eedc89bdf0",
+      "name": "生成图标"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "4tHTAEVO9ryUxOhn",
+          "mode": "list",
+          "cachedResultName": "sub-钉钉通知"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "content": "=![]({{ $json.url }})",
+            "msgtype": "markdown",
+            "name": "用电情况",
+            "title": "用电情况"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "msgtype",
+              "displayName": "msgtype",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "state",
+              "displayName": "state",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        352,
+        -96
+      ],
+      "id": "9fe9a1f8-c4c5-4e2c-875d-2922a0a5d412",
+      "name": "markdown-钉钉通知"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "daysInterval": 3,
+              "triggerAtHour": 9,
+              "triggerAtMinute": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -544,
+        0
+      ],
+      "id": "1675a9c2-a96e-4f96-a884-d141b4d6eeea",
+      "name": "每三天9点10"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "vI7EThg6H9bW1f4v"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-09-01T02:14:45.646Z",
+      "updatedAt": "2025-09-01T02:14:45.646Z",
+      "role": "workflow:owner",
+      "workflowId": "oBNVSfYLOHqo7LpZ",
+      "projectId": "BeX3bor8ts20lbDK"
+    }
+  ],
+  "staticData": {
+    "node:每三天9点10": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [
+    {
+      "createdAt": "2025-06-26T06:14:33.448Z",
+      "updatedAt": "2025-06-26T06:14:33.448Z",
+      "id": "FHV017iDd8qf8jAL",
+      "name": "智能家居"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2025-09-01T03:38:30.000Z",
+  "versionId": "ae7a0ed3-813b-481d-937f-1bebbed9398e"
+}
