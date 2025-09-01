@@ -768,7 +768,9 @@
     ]
   },
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "vI7EThg6H9bW1f4v"
   },
   "shared": [
     {
@@ -794,6 +796,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2025-08-08T08:04:18.000Z",
-  "versionId": "7b11c377-1865-4cec-a808-a0963a93a67f"
+  "updatedAt": "2025-09-01T03:37:49.000Z",
+  "versionId": "9e11c3d4-2100-4f05-b177-92eec8f0b5b0"
 }
