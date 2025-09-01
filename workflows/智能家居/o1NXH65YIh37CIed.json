@@ -61,12 +61,17 @@
       "main": [
         [
           {
+            "node": "保存SQLite临时表",
+            "type": "main",
+            "index": 0
+          },
+          {
             "node": "保存到SQLite",
             "type": "main",
             "index": 0
           },
           {
-            "node": "保存SQLite临时表",
+            "node": "保存到Supabase",
             "type": "main",
             "index": 0
           }
@@ -88,6 +93,11 @@
           }
         ]
       ]
+    },
+    "保存到Supabase": {
+      "main": [
+        []
+      ]
     }
   },
   "createdAt": "2025-07-03T09:20:18.575Z",
@@ -106,7 +116,7 @@
       "typeVersion": 1,
       "position": [
         -16,
-        112
+        64
       ],
       "id": "841c99f0-c59e-4f26-b4fe-66f4af34ce6f",
       "name": "接收中枢虚拟事件",
@@ -153,7 +163,7 @@
       "typeVersion": 3.4,
       "position": [
         208,
-        112
+        64
       ],
       "id": "b5147c52-b458-4cbe-86ed-8b4dee9528e5",
       "name": "必要字段"
@@ -230,7 +240,7 @@
       "typeVersion": 1.2,
       "position": [
         656,
-        -80
+        -128
       ],
       "id": "24beb4d6-db30-4ce4-96e9-39ced468bb00",
       "name": "钉钉通知"
@@ -259,7 +269,7 @@
       "typeVersion": 1.2,
       "position": [
         656,
-        304
+        256
       ],
       "id": "c2999fa4-8367-4f8e-bce0-872511a60a5b",
       "name": "电脑Wol网络唤醒"
@@ -321,7 +331,7 @@
       "typeVersion": 3.2,
       "position": [
         432,
-        208
+        160
       ],
       "id": "fa7d110e-9543-4a40-ae26-56c2cbc692e4",
       "name": "具体事件判断"
@@ -333,8 +343,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        360,
-        96
+        368,
+        48
       ],
       "typeVersion": 1,
       "id": "50ea6ca2-ec2c-4228-96f2-88876b362811",
@@ -377,7 +387,7 @@
       "typeVersion": 2.2,
       "position": [
         432,
-        -80
+        -128
       ],
       "id": "6a6e9237-75fd-42d0-962b-05ea25f7621a",
       "name": "\"HA_\"事件"
@@ -390,7 +400,7 @@
       "typeVersion": 2,
       "position": [
         656,
-        112
+        64
       ],
       "id": "0aeb7359-b270-4db9-bbe5-0a10f5019b96",
       "name": "全局变量处理"
@@ -406,10 +416,11 @@
       "typeVersion": 1,
       "position": [
         880,
-        16
+        64
       ],
       "id": "d0f84c78-28cb-4dce-ba55-37e8f93aa58c",
-      "name": "保存到SQLite"
+      "name": "保存到SQLite",
+      "alwaysOutputData": false
     },
     {
       "parameters": {
@@ -422,7 +433,7 @@
       "typeVersion": 1,
       "position": [
         880,
-        208
+        256
       ],
       "id": "58ce020e-20ea-411a-ba6f-551795301f28",
       "name": "保存SQLite临时表",
@@ -450,15 +461,38 @@
       "typeVersion": 1.2,
       "position": [
         1104,
-        208
+        256
       ],
       "id": "49c6f62c-4d95-4521-ac5c-54fb3d564a93",
       "name": "触发通知-子流程"
+    },
+    {
+      "parameters": {
+        "tableId": "global_variables",
+        "dataToSend": "autoMapInputData",
+        "inputsToIgnore": "keys"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        880,
+        -128
+      ],
+      "id": "b92bd97a-b46c-4900-be1c-bb0fcb561d80",
+      "name": "保存到Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "f2MsmmkDHIEOKF31",
+          "name": "Supabase account"
+        }
+      }
     }
   ],
   "pinData": {},
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "vI7EThg6H9bW1f4v"
   },
   "shared": [
     {
@@ -491,6 +525,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-08-14T09:40:40.000Z",
-  "versionId": "15907dd4-15dc-47ef-b68b-b0da517a67a4"
+  "updatedAt": "2025-09-01T09:12:48.000Z",
+  "versionId": "644f163c-f227-4a40-8f66-cada4a1d84eb"
 }
