@@ -238,7 +238,9 @@
   ],
   "staticData": {
     "node:每三天9点10": {
-      "recurrenceRules": []
+      "recurrenceRules": [
+        245
+      ]
     }
   },
   "tags": [
