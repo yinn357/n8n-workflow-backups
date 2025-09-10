@@ -1,0 +1,217 @@
+{
+  "active": true,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "sub-用电情况图表",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "每三天9点10": {
+      "main": [
+        [
+          {
+            "node": "sub-用电情况图表",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "sub-用电情况图表": {
+      "main": [
+        [
+          {
+            "node": "markdown-钉钉通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-01T02:14:45.623Z",
+  "id": "oBNVSfYLOHqo7LpZ",
+  "isArchived": false,
+  "meta": null,
+  "name": "用电量图表",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -544,
+        -192
+      ],
+      "id": "32531393-0082-4830-ac3c-21af09f7cae5",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "4tHTAEVO9ryUxOhn",
+          "mode": "list",
+          "cachedResultName": "sub-钉钉通知"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "content": "=![]({{ $json.url }})",
+            "msgtype": "markdown",
+            "name": "用电情况",
+            "title": "用电情况"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "msgtype",
+              "displayName": "msgtype",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "state",
+              "displayName": "state",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -96,
+        -96
+      ],
+      "id": "9fe9a1f8-c4c5-4e2c-875d-2922a0a5d412",
+      "name": "markdown-钉钉通知"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "daysInterval": 3,
+              "triggerAtHour": 9,
+              "triggerAtMinute": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -544,
+        0
+      ],
+      "id": "1675a9c2-a96e-4f96-a884-d141b4d6eeea",
+      "name": "每三天9点10"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "iT9mP6160h6LOjwb",
+          "mode": "list",
+          "cachedResultName": "sub-用电情况图表"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -320,
+        -96
+      ],
+      "id": "5ec18507-12d7-4649-8b50-2c7bd532795f",
+      "name": "sub-用电情况图表"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "vI7EThg6H9bW1f4v"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-09-01T02:14:45.646Z",
+      "updatedAt": "2025-09-01T02:14:45.646Z",
+      "role": "workflow:owner",
+      "workflowId": "oBNVSfYLOHqo7LpZ",
+      "projectId": "BeX3bor8ts20lbDK"
+    }
+  ],
+  "staticData": {
+    "node:每三天9点10": {
+      "recurrenceRules": [
+        251
+      ]
+    }
+  },
+  "tags": [
+    {
+      "createdAt": "2025-06-26T06:14:33.448Z",
+      "updatedAt": "2025-09-10T02:08:30.393Z",
+      "id": "FHV017iDd8qf8jAL",
+      "name": "HomeAssistant"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2025-09-10T03:09:01.000Z",
+  "versionId": "a597d74d-3e30-45d6-ae4f-a9b54b881f41"
+}
