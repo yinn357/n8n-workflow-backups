@@ -1,0 +1,315 @@
+{
+  "active": true,
+  "connections": {
+    "功能判断": {
+      "main": [
+        [
+          {
+            "node": "HA功能内联按钮",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "TG-HA功能实现",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TG消息监听": {
+      "main": [
+        [
+          {
+            "node": "数据格式处理",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "数据格式处理": {
+      "main": [
+        [
+          {
+            "node": "功能判断",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-10T01:51:17.368Z",
+  "id": "AbK2fRZiIsUZ1Oys",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "TG-接收消息",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bf974202-ee25-475a-b0c3-6a56f8d0dba4",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "/homeassistant",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2b968d42-384a-4f5a-bc17-1749a14c7e0f",
+                    "leftValue": "={{ $json.data }}",
+                    "rightValue": "HA_",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -128,
+        -160
+      ],
+      "id": "1c3f9707-829a-41ff-b095-c9aada6943ae",
+      "name": "功能判断",
+      "notes": "0:/homeassistant Ha功能菜单"
+    },
+    {
+      "parameters": {
+        "content": "## 功能判断\n- 0:/homeassistant Ha功能菜单\n- 1:HA_ 具体Ha功能"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -224,
+        -256
+      ],
+      "typeVersion": 1,
+      "id": "7b12830a-9deb-4c86-b423-d192d14a0ca4",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "Ha功能菜单",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "变量记录",
+                    "additionalFields": {
+                      "callback_data": "HA_VariableRecord"
+                    }
+                  },
+                  {
+                    "text": "活动记录",
+                    "additionalFields": {
+                      "callback_data": "HA_ActivityRecord"
+                    }
+                  },
+                  {
+                    "text": "用电情况",
+                    "additionalFields": {
+                      "callback_data": "HA_SgccRecord"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        96,
+        -256
+      ],
+      "id": "d02d8d5e-c640-4ba1-98c7-45b550ee847e",
+      "name": "HA功能内联按钮",
+      "webhookId": "f26ce4f0-2745-4201-a2c6-729201823aaa",
+      "credentials": {
+        "telegramApi": {
+          "id": "HUakjpqref6diiOf",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message",
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -576,
+        -160
+      ],
+      "id": "dd8d5f35-7bd3-43ad-94dc-eab4003daeb5",
+      "name": "TG消息监听",
+      "webhookId": "96b4627f-85c5-4d54-8c8b-7927b8e226f2",
+      "credentials": {
+        "telegramApi": {
+          "id": "HUakjpqref6diiOf",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {  \n\n  let callback_query = item.json.callback_query;\n  let message = item.json.message;\n  // 获取不同消息的message\n  message = message || callback_query?.message\n\n  // 取值\n  let chat_id = message.chat.id; \n  let message_id = message.message_id; \n  let text = message.text; \n  let data = callback_query?.data;\n  \n  let result ={\n  chat_id, message_id, text, data\n  }\n  return { json: result };\n})"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -352,
+        -160
+      ],
+      "id": "12ecfdc8-118b-40e9-bb7d-140ba896c387",
+      "name": "数据格式处理"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "am6WBhSgGwTBNlnB",
+          "mode": "list",
+          "cachedResultName": "sub-TG-HA功能实现"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "chat_id": "={{ $json.chat_id }}",
+            "message_id": "={{ $json.message_id }}",
+            "text": "={{ $json.text }}",
+            "data": "={{ $json.data }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "message_id",
+              "displayName": "message_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "text",
+              "displayName": "text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        96,
+        -64
+      ],
+      "id": "53385343-33f1-47b4-b90f-c78f198ba898",
+      "name": "TG-HA功能实现"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "vI7EThg6H9bW1f4v"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-09-10T01:51:17.392Z",
+      "updatedAt": "2025-09-10T01:51:17.392Z",
+      "role": "workflow:owner",
+      "workflowId": "AbK2fRZiIsUZ1Oys",
+      "projectId": "BeX3bor8ts20lbDK"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-09-10T01:51:26.908Z",
+      "updatedAt": "2025-09-10T01:51:26.908Z",
+      "id": "sbaHeFsQikO6Iirc",
+      "name": "Telegram"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2025-09-10T06:11:01.000Z",
+  "versionId": "75a21cc4-fe33-4eba-811c-17b01eba4b19"
+}
