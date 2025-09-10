@@ -1,0 +1,218 @@
+{
+  "active": true,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "sub-HA日志-传感器图表",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "每天9点": {
+      "main": [
+        [
+          {
+            "node": "sub-HA日志-传感器图表",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "sub-HA日志-传感器图表": {
+      "main": [
+        [
+          {
+            "node": "markdown-钉钉通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-25T03:45:21.562Z",
+  "id": "hJ3ECrGIVuMsO2Ka",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "HA日志-传感器图表",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        -176
+      ],
+      "id": "a4d9fe33-9f41-4cca-bc9e-d80a116a6927",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "4tHTAEVO9ryUxOhn",
+          "mode": "list",
+          "cachedResultName": "sub-钉钉通知"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "content": "=![]({{ $json.url }})",
+            "msgtype": "markdown",
+            "name": "活动情况",
+            "title": "活动情况"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "msgtype",
+              "displayName": "msgtype",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "state",
+              "displayName": "state",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        128,
+        -80
+      ],
+      "id": "08377b1c-fa38-427c-ae0b-568473528112",
+      "name": "markdown-钉钉通知"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -320,
+        16
+      ],
+      "id": "8feea5b8-3eaf-402f-bf5a-911306dd337b",
+      "name": "每天9点"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "rzClIyBxaeUymqiE",
+          "mode": "list",
+          "cachedResultName": "sub-HA日志-传感器图表"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -96,
+        -80
+      ],
+      "id": "08af8392-d2c2-4846-8a41-713701251c0f",
+      "name": "sub-HA日志-传感器图表"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Shanghai",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-07-25T03:45:21.580Z",
+      "updatedAt": "2025-07-25T03:45:21.580Z",
+      "role": "workflow:owner",
+      "workflowId": "hJ3ECrGIVuMsO2Ka",
+      "projectId": "BeX3bor8ts20lbDK"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    },
+    "node:每天9点": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [
+    {
+      "createdAt": "2025-06-26T06:14:33.448Z",
+      "updatedAt": "2025-09-10T02:08:30.393Z",
+      "id": "FHV017iDd8qf8jAL",
+      "name": "HomeAssistant"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2025-09-10T03:00:26.000Z",
+  "versionId": "8020d429-fed4-491e-a03f-6b79ad670fc3"
+}
