@@ -1,0 +1,154 @@
+{
+  "active": false,
+  "connections": {
+    "消息处理": {
+      "main": [
+        [
+          {
+            "node": "钉钉webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "子流程入口": {
+      "main": [
+        [
+          {
+            "node": "消息处理",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "钉钉流式触发节点": {
+      "main": [
+        [
+          {
+            "node": "钉钉webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-12T02:29:09.986Z",
+  "id": "y6WLbpSxXdIKavuc",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "ding-test",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-dingtalk-bby.dingTalkStreamTrigger",
+      "typeVersion": 1,
+      "position": [
+        -304,
+        -64
+      ],
+      "id": "fa6a51a5-d2ea-4dec-9c84-9a7edd44901c",
+      "name": "钉钉流式触发节点",
+      "credentials": {
+        "dingTalkBbyApi": {
+          "id": "DPtbCz2WwH64pG2x",
+          "name": "DingTalk account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://oapi.dingtalk.com/robot/send?access_token=6cefc1fb044be13c741aa885ae2047467343c8f6eeaa4b3e3b98c292f678184a",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"msgtype\": \"{{$json.msgtype}}\",\n  \"text\": {\n        \"content\":\"{{$json.text.content}}\"\n  },\n  \"markdown\": {\n         \"title\":\"{{$json.markdown.title}}\",\n         \"text\": \"{{$json.markdown.text}}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        608,
+        160
+      ],
+      "id": "05c795ae-7eca-470d-83e9-7497fc4c15d1",
+      "name": "钉钉webhook",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const data = item.json;\n  // 名称\n  let name = data.name || $workflow.name;\n  // 状态\n  let state = data.state || '💬';\n  switch (state) {\n    case '失败':\n      state = state+'❌';\n      break;\n    case '成功':\n      state = state+'✅';\n      break;\n  }\n  \n  // 消息头\n  const msgHeader  = `${name}: ${state} - n8n Automation Notify\\\\n\\\\n`\n  // 内容\n  const content = msgHeader + data.content;\n  let title = data.title || '';\n  // 文本\n  data.text = {\n    content\n  };\n  // markdown\n  data.markdown={\n    title,\n    text: content\n  };\n  return { json: data };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        160
+      ],
+      "id": "c309d660-537b-4574-8967-24ba4f228691",
+      "name": "消息处理",
+      "notesInFlow": true,
+      "retryOnFail": false,
+      "notes": "对添加消息头部信息,包含webhook关键字"
+    },
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "  {\n    \"msgtype\": \"text\",\n    \"content\": \"content\",\n    \"title\": \"title\",\n    \"name\": \"名称\",\n    \"state\": \"成功\"\n  }"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        160,
+        160
+      ],
+      "id": "d5ce50df-0d42-4467-a6d0-a4f78be1b4df",
+      "name": "子流程入口",
+      "notesInFlow": false,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.message.sessionWebhook }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"msgtype\": \"text\",\n  \"text\": {\n        \"content\":\"回复-{{ $json.message.text.content }}\"\n  }\n\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        -128
+      ],
+      "id": "daeb49d8-b723-4678-aee5-468a1e54dfd2",
+      "name": "钉钉webhook1",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-09-12T02:29:10.005Z",
+      "updatedAt": "2025-09-12T02:29:10.005Z",
+      "role": "workflow:owner",
+      "workflowId": "y6WLbpSxXdIKavuc",
+      "projectId": "BeX3bor8ts20lbDK"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-09-12T03:26:35.000Z",
+  "versionId": "89f41b0d-659b-48b3-ae31-b3b76f45146d"
+}
