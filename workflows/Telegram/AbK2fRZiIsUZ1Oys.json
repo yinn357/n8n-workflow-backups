@@ -16,6 +16,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "调用ChatAgent",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
@@ -35,6 +42,17 @@
         [
           {
             "node": "功能判断",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "调用ChatAgent": {
+      "main": [
+        [
+          {
+            "node": "AI消息回复",
             "type": "main",
             "index": 0
           }
@@ -97,6 +115,29 @@
                 ],
                 "combinator": "and"
               }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "39e4a8a8-2ec7-4647-884f-228ebc82b371",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
             }
           ]
         },
@@ -106,7 +147,7 @@
       "typeVersion": 3.2,
       "position": [
         -128,
-        -160
+        -80
       ],
       "id": "1c3f9707-829a-41ff-b095-c9aada6943ae",
       "name": "功能判断",
@@ -114,7 +155,7 @@
     },
     {
       "parameters": {
-        "content": "## 功能判断\n- 0:/homeassistant Ha功能菜单\n- 1:HA_ 具体Ha功能"
+        "content": "## 功能判断\n- 0:/homeassistant Ha功能菜单\n- 1:HA_ 具体Ha功能\n\n- 其他消息由Agent回复"
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
@@ -190,7 +231,7 @@
       "typeVersion": 1.2,
       "position": [
         -576,
-        -160
+        -64
       ],
       "id": "dd8d5f35-7bd3-43ad-94dc-eab4003daeb5",
       "name": "TG消息监听",
@@ -210,7 +251,7 @@
       "typeVersion": 2,
       "position": [
         -352,
-        -160
+        -64
       ],
       "id": "12ecfdc8-118b-40e9-bb7d-140ba896c387",
       "name": "数据格式处理"
@@ -283,6 +324,83 @@
       ],
       "id": "53385343-33f1-47b4-b90f-c78f198ba898",
       "name": "TG-HA功能实现"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('TG消息监听').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        128
+      ],
+      "id": "79b4a7bc-eee3-4eb6-955e-0395dd15c087",
+      "name": "AI消息回复",
+      "webhookId": "92b0f23f-edeb-4e1a-b5e5-ad4a49a86a54",
+      "credentials": {
+        "telegramApi": {
+          "id": "HUakjpqref6diiOf",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "CRB8ZmUL5UUmV5q9",
+          "mode": "list",
+          "cachedResultName": "sub-ChatAgent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "memoryKey": "={{ $json.chat_id }}",
+            "content": "={{ $json.text }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "memoryKey",
+              "displayName": "memoryKey",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        96,
+        128
+      ],
+      "id": "7409562f-40e0-4cf0-8b05-b89de4b83ec7",
+      "name": "调用ChatAgent"
     }
   ],
   "pinData": {},
@@ -310,6 +428,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-09-10T06:11:01.000Z",
-  "versionId": "75a21cc4-fe33-4eba-811c-17b01eba4b19"
+  "updatedAt": "2025-09-12T01:12:29.000Z",
+  "versionId": "8eef6608-c32a-4148-bbc3-d53e85ce9ac3"
 }
