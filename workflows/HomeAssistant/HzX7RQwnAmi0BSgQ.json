@@ -181,7 +181,7 @@
           "interval": [
             {
               "field": "cronExpression",
-              "expression": "15 15,6,9,12,17,23 * * *"
+              "expression": "15 15 9,19 * * *"
             }
           ]
         }
@@ -256,7 +256,8 @@
         -304
       ],
       "id": "b7973840-ff97-4285-aac4-e31c5d14b223",
-      "name": "子流程触发"
+      "name": "子流程触发",
+      "disabled": true
     },
     {
       "parameters": {
@@ -329,6 +330,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-09-01T03:37:10.000Z",
-  "versionId": "03eaf844-31f1-4c61-9b00-eea59136c962"
+  "updatedAt": "2025-09-22T07:09:32.000Z",
+  "versionId": "2b7e07d3-a6de-49dc-9d34-476d8b6994e0"
 }
