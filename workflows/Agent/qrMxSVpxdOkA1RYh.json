@@ -1,0 +1,186 @@
+{
+  "active": false,
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "天气预报 Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "触发ChatAgent": {
+      "main": [
+        [
+          {
+            "node": "天气预报 Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qwen2.5-7B-Instruct": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "天气预报 Agent",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "天气 OpenWeather MCP Client1": {
+      "ai_tool": [
+        [
+          {
+            "node": "天气预报 Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-29T09:18:57.047Z",
+  "id": "qrMxSVpxdOkA1RYh",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "sub-WeatherAgent",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{\n  \"memoryKey\": \"key\",\n  \"content\": \"内容\"\n}"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -288,
+        -240
+      ],
+      "id": "c2c1bf49-1c3b-4c0a-8f67-a8a3efd76d5a",
+      "name": "触发ChatAgent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        -16
+      ],
+      "id": "d6a5e48b-7cd2-40dc-8ad0-15c4d485f808",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "nhmY1teQyjDTFTIP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "Qwen/Qwen2.5-7B-Instruct",
+          "mode": "list",
+          "cachedResultName": "Qwen/Qwen2.5-7B-Instruct"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        64,
+        -16
+      ],
+      "id": "8880df12-d7bd-4790-9a84-ad252dc5551d",
+      "name": "Qwen2.5-7B-Instruct",
+      "credentials": {
+        "openAiApi": {
+          "id": "f86xyna37dSYhxAZ",
+          "name": "ModelScope OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://mcp.api-inference.modelscope.net/b1eb59e877eb40/mcp",
+        "serverTransport": "httpStreamable",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.1,
+      "position": [
+        192,
+        -16
+      ],
+      "id": "4665a7f9-62a7-45ba-a606-0f1efa7506fe",
+      "name": "天气 OpenWeather MCP Client1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.content }}",
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "=# 天气预报 个人人工智能助手系统提示\n\n## 重要指南\n- 默认位置为湖南省长沙市岳麓区\n- 记住当前的日期和时间：**今天是 {{ $now.format('cccc') }} 年 {{ $now.format('yyyy-MM-dd HH:mm') }}**"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -8,
+        -240
+      ],
+      "id": "9545b312-e00a-4591-8f12-573fc18647e5",
+      "name": "天气预报 Agent"
+    }
+  ],
+  "pinData": {
+    "触发ChatAgent": [
+      {
+        "json": {
+          "memoryKey": "key1",
+          "content": "湖南长沙昨天,今天,明天天气"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-09-29T09:18:57.071Z",
+      "updatedAt": "2025-09-29T09:18:57.071Z",
+      "role": "workflow:owner",
+      "workflowId": "qrMxSVpxdOkA1RYh",
+      "projectId": "BeX3bor8ts20lbDK"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-09-29T09:18:52.410Z",
+      "updatedAt": "2025-09-29T09:18:52.410Z",
+      "id": "qcCtjqIt2kHzTxCB",
+      "name": "Agent"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-09-29T09:26:04.000Z",
+  "versionId": "80eed8d7-8a2b-494f-b168-d4125b692215"
+}
