@@ -38,8 +38,8 @@
       "type": "n8n-nodes-home-assistant-websocket.homeAssistantTrigger",
       "typeVersion": 1,
       "position": [
-        -140,
-        -40
+        -112,
+        -128
       ],
       "id": "ab7c1708-16b5-4776-98e3-1d26f0f66017",
       "name": "接收中枢虚拟事件",
@@ -73,7 +73,7 @@
       "typeVersion": 1,
       "position": [
         80,
-        -40
+        -128
       ],
       "id": "864df47d-8c89-45fd-bccc-7646467ad116",
       "name": "发生中枢虚拟事件",
@@ -92,11 +92,45 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        220,
+        352,
         -160
       ],
       "id": "238e7049-b9b5-4baf-9dc7-ae47794cf93a",
       "name": "ping 测试"
+    },
+    {
+      "parameters": {
+        "resource": "service",
+        "operation": "call",
+        "domain": "notify",
+        "service": "send_message",
+        "serviceAttributes": {
+          "attributes": [
+            {
+              "name": "entity_id",
+              "value": "notify.xiaomi_cn_384433186_lx05_play_text_a_5_1"
+            },
+            {
+              "name": "message",
+              "value": "小爱音箱播放文本测试"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.homeAssistant",
+      "typeVersion": 1,
+      "position": [
+        80,
+        96
+      ],
+      "id": "1b622571-a3e4-494c-b84e-87b4f3037452",
+      "name": "小爱播放文本",
+      "credentials": {
+        "homeAssistantApi": {
+          "id": "6EZ5GmsOjYCFa9Qg",
+          "name": "Home Assistant account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -128,6 +162,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-06-27T15:04:06.000Z",
-  "versionId": "998a65da-c57e-4220-b0c7-87c1f57f4283"
+  "updatedAt": "2025-09-29T09:44:49.000Z",
+  "versionId": "a53b577a-df2f-45d8-94c7-67c04dcc4115"
 }
