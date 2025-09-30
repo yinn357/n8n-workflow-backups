@@ -120,8 +120,8 @@
       "type": "n8n-nodes-base.homeAssistant",
       "typeVersion": 1,
       "position": [
-        80,
-        96
+        208,
+        128
       ],
       "id": "1b622571-a3e4-494c-b84e-87b4f3037452",
       "name": "小爱播放文本",
@@ -131,9 +131,83 @@
           "name": "Home Assistant account"
         }
       }
+    },
+    {
+      "parameters": {
+        "resource": "service"
+      },
+      "type": "n8n-nodes-base.homeAssistant",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        80
+      ],
+      "id": "f38e76ff-f20f-4ee0-9166-c4bd68960bb5",
+      "name": "Get many services",
+      "credentials": {
+        "homeAssistantApi": {
+          "id": "6EZ5GmsOjYCFa9Qg",
+          "name": "Home Assistant account"
+        }
+      }
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "接收中枢虚拟事件": [
+      {
+        "json": {
+          "event_type": "state_changed",
+          "data": {
+            "entity_id": "sensor.homehost_online_time",
+            "old_state": {
+              "entity_id": "sensor.homehost_online_time",
+              "state": "974",
+              "attributes": {
+                "unit_of_measurement": "min",
+                "device_class": "duration",
+                "icon": "mdi:timer",
+                "friendly_name": "HomeHost Online Time"
+              },
+              "last_changed": "2025-09-30T08:13:56.038271+00:00",
+              "last_reported": "2025-09-30T08:13:56.038271+00:00",
+              "last_updated": "2025-09-30T08:13:56.038271+00:00",
+              "context": {
+                "id": "01K6CTYWE6B16FF20SMV4G3TS5",
+                "parent_id": null,
+                "user_id": null
+              }
+            },
+            "new_state": {
+              "entity_id": "sensor.homehost_online_time",
+              "state": "975",
+              "attributes": {
+                "unit_of_measurement": "min",
+                "device_class": "duration",
+                "icon": "mdi:timer",
+                "friendly_name": "HomeHost Online Time"
+              },
+              "last_changed": "2025-09-30T08:14:56.038043+00:00",
+              "last_reported": "2025-09-30T08:14:56.038043+00:00",
+              "last_updated": "2025-09-30T08:14:56.038043+00:00",
+              "context": {
+                "id": "01K6CV0Q163885PY64FDSKYSAN",
+                "parent_id": null,
+                "user_id": null
+              }
+            }
+          },
+          "origin": "LOCAL",
+          "time_fired": "2025-09-30T08:14:56.038043+00:00",
+          "context": {
+            "id": "01K6CV0Q163885PY64FDSKYSAN",
+            "parent_id": null,
+            "user_id": null
+          },
+          "timestamp": "2025-09-30T08:14:56.042Z"
+        }
+      }
+    ]
+  },
   "settings": {
     "executionOrder": "v1"
   },
@@ -162,6 +236,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-09-29T09:44:49.000Z",
-  "versionId": "a53b577a-df2f-45d8-94c7-67c04dcc4115"
+  "updatedAt": "2025-09-30T09:32:24.000Z",
+  "versionId": "75979556-045f-4907-9fbe-48d162673c21"
 }
