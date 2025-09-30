@@ -1,0 +1,240 @@
+{
+  "active": false,
+  "connections": {
+    "Telegram子节点触发": {
+      "main": [
+        [
+          {
+            "node": "数据处理",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "数据处理": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit a text message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "发送一条消息",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-04T01:45:43.326Z",
+  "id": "cRubjGp6jHXk4JHk",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "sub-Telegram通知",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "chatId"
+            },
+            {
+              "name": "content"
+            },
+            {
+              "name": "state"
+            },
+            {
+              "name": "title"
+            },
+            {
+              "name": "msgtype"
+            },
+            {
+              "name": "messageId"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -288,
+        -32
+      ],
+      "id": "70a88f5b-835d-496a-91dd-6c04726fb0a4",
+      "name": "Telegram子节点触发"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const data = item.json;\n  // type\n  const msgtypeMap = { md: 'markdown' };\n  data.msgtype = msgtypeMap[data.msgtype] || data.msgtype;\n\n  // 名称\n  let name = data.name || $workflow.name.replaceAll('sub-','');\n  // 状态\n  let state = data.state || '💬';\n  switch (state) {\n    case '失败':\n    case '错误':\n      state = state+'❌';\n      break;\n    case '成功':\n    case '完成':\n      state = state+'✅';\n      break;\n  }\n  \n  // 消息头\n  const msgHeader  = `${name}: ${state} \\n\\n`\n  // 内容\n  data.content = msgHeader + data.content;\n  data.title = data.title || '';\n  return { json: data };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        -32
+      ],
+      "id": "0b15f0dd-0fbb-4ff5-b21a-b0e152025ae9",
+      "name": "数据处理"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.content }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        384,
+        64
+      ],
+      "id": "b0d60e3d-4433-4ebe-9a83-6f6ef352a713",
+      "name": "发送一条消息",
+      "webhookId": "fbe6792b-e7f2-4845-b9a2-3bf26462310f",
+      "credentials": {
+        "telegramApi": {
+          "id": "HUakjpqref6diiOf",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.msgtype }}",
+                    "rightValue": "edit",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "a691cae7-6f49-4a28-98aa-ab9ddc6bbc74"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "cf25ef6a-4a48-4914-befc-fb1ba687bef2",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        160,
+        -32
+      ],
+      "id": "e3fe3901-3f5a-4ce0-a2a3-20f6daf89bc5",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "editMessageText",
+        "chatId": "={{ $json.chatId }}",
+        "messageId": "={{ $json.messageId }}",
+        "text": "={{ $json.content }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        384,
+        -128
+      ],
+      "id": "81ff2af4-ef2b-4571-94a0-48573a00f6e3",
+      "name": "Edit a text message",
+      "webhookId": "1eda162d-fad2-4d24-b53e-21312e42f781",
+      "credentials": {
+        "telegramApi": {
+          "id": "HUakjpqref6diiOf",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-09-04T01:45:43.378Z",
+      "updatedAt": "2025-09-04T01:45:43.378Z",
+      "role": "workflow:owner",
+      "workflowId": "cRubjGp6jHXk4JHk",
+      "projectId": "BeX3bor8ts20lbDK"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-07-11T02:54:27.831Z",
+      "updatedAt": "2025-07-11T03:55:43.484Z",
+      "id": "JqrpOsXNCY5fMnlD",
+      "name": "Common"
+    },
+    {
+      "createdAt": "2025-09-10T01:51:26.908Z",
+      "updatedAt": "2025-09-10T01:51:26.908Z",
+      "id": "sbaHeFsQikO6Iirc",
+      "name": "Telegram"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-09-30T07:23:59.000Z",
+  "versionId": "7ceab0da-49d8-4be9-9d9c-0c351587b878"
+}
