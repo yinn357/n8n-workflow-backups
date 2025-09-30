@@ -1,5 +1,5 @@
 {
-  "active": false,
+  "active": true,
   "connections": {
     "监听HA所有事件": {
       "main": [
@@ -27,7 +27,18 @@
       "main": [
         [
           {
-            "node": "事件日志记录表",
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Pg Upsert HA实体状态",
             "type": "main",
             "index": 0
           }
@@ -41,85 +52,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "name": "传感器记录",
+  "name": "HA全部事件记录",
   "nodes": [
-    {
-      "parameters": {
-        "workflowId": {
-          "__rl": true,
-          "value": "4tHTAEVO9ryUxOhn",
-          "mode": "list",
-          "cachedResultName": "钉钉通知"
-        },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "msgtype": "text",
-            "state": "通知",
-            "content": "=实体id:{{ $json.data.entity_id }}\\\\n旧状态:{{ $json.data.old_state.attributes.friendly_name }} - {{ $json.data.old_state.state }}\\\\n新状态:{{ $json.data.new_state.attributes.friendly_name }} - {{ $json.data.new_state.state }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "msgtype",
-              "displayName": "msgtype",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string"
-            },
-            {
-              "id": "content",
-              "displayName": "content",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string"
-            },
-            {
-              "id": "title",
-              "displayName": "title",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string"
-            },
-            {
-              "id": "name",
-              "displayName": "name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string"
-            },
-            {
-              "id": "state",
-              "displayName": "state",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string"
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.2,
-      "position": [
-        0,
-        -220
-      ],
-      "id": "de2cd87c-e57f-4d64-aaf5-d65c7c899f1a",
-      "name": "Execute Workflow"
-    },
     {
       "parameters": {
         "eventType": "any"
@@ -128,7 +62,7 @@
       "typeVersion": 1,
       "position": [
         0,
-        40
+        64
       ],
       "id": "b7407517-1a06-47f1-984c-14158fe417f9",
       "name": "监听HA所有事件",
@@ -146,34 +80,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        220,
-        40
+        224,
+        64
       ],
       "id": "c697feaf-6af2-4745-9ba3-1841a7487d09",
       "name": "处理事件名称状态等",
       "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "operation": "insert",
-        "collection": "ha_event_logs",
-        "fields": "entity_id,friendly_name,device_name,device_type,device_event,old_state,new_state,createTime",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.mongoDb",
-      "typeVersion": 1.2,
-      "position": [
-        660,
-        40
-      ],
-      "id": "9d6ec3f7-6a69-46da-8d52-547f126c91c0",
-      "name": "事件日志记录表",
-      "credentials": {
-        "mongoDb": {
-          "id": "uKpjr544WS3Oo6zh",
-          "name": "MongoDB account"
-        }
-      }
     },
     {
       "parameters": {
@@ -190,11 +102,191 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        440,
-        40
+        448,
+        64
       ],
       "id": "79afb415-75ca-45ca-b932-82234c4f3f76",
       "name": "时间格式"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8f397165-b078-45b4-b2ef-87baa3f69e4f",
+              "leftValue": "={{ $json.entity_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        64
+      ],
+      "id": "5e771c8f-b40e-4939-bc29-a42dce1fb563",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "content": "## HA实体状态表字段\n- createTime\t创建时间\n- friendly_name\t设备/类型/事件\n- device_name\t设备名称\n- device_type\t类型\n- device_event\t事件名称\n- entity_id\t\t实体id\n- old_state\t\t上次状态\n- new_state\t\t最新状态",
+        "height": 256,
+        "width": 256
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        800,
+        -240
+      ],
+      "typeVersion": 1,
+      "id": "79a33961-3528-4b54-b07f-3f62e0ec84ce",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "ha_entity_current_state",
+          "mode": "list",
+          "cachedResultName": "ha_entity_current_state"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "entity_id": "={{ $json.entity_id }}",
+            "createtime": "={{ $json.createTime }}",
+            "friendly_name": "={{ $json.friendly_name }}",
+            "device_name": "={{ $json.device_name }}",
+            "device_type": "={{ $json.device_type }}",
+            "device_event": "={{ $json.device_event }}",
+            "old_state": "={{ $json.old_state }}",
+            "new_state": "={{ $json.new_state }}"
+          },
+          "matchingColumns": [
+            "entity_id"
+          ],
+          "schema": [
+            {
+              "id": "createtime",
+              "displayName": "createtime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "friendly_name",
+              "displayName": "friendly_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "device_name",
+              "displayName": "device_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "device_type",
+              "displayName": "device_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "device_event",
+              "displayName": "device_event",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "entity_id",
+              "displayName": "entity_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "old_state",
+              "displayName": "old_state",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "new_state",
+              "displayName": "new_state",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "connectionTimeout": 5,
+          "delayClosingIdleConnection": 300,
+          "outputColumns": [
+            "*"
+          ],
+          "replaceEmptyStrings": true
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        896,
+        64
+      ],
+      "id": "1cd80a01-79e8-483d-9053-68e3d1f324fe",
+      "name": "Pg Upsert HA实体状态",
+      "credentials": {
+        "postgres": {
+          "id": "MMYWT59U3jvwqtaH",
+          "name": "Supabase Postgres account"
+        }
+      }
     }
   ],
   "pinData": {
@@ -267,7 +359,9 @@
   "settings": {
     "executionOrder": "v1",
     "timezone": "Asia/Shanghai",
-    "callerPolicy": "workflowsFromSameOwner"
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": 10,
+    "errorWorkflow": "vI7EThg6H9bW1f4v"
   },
   "shared": [
     {
@@ -288,6 +382,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-07-11T03:54:38.000Z",
-  "versionId": "97782e06-d8dc-4e53-b32d-b60e98e58c04"
+  "updatedAt": "2025-09-30T09:43:08.000Z",
+  "versionId": "500a5e51-3fd2-4a15-951a-c96548fb625f"
 }
