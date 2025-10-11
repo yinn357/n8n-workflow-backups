@@ -196,27 +196,6 @@
           "name": "Telegram account"
         }
       }
-    },
-    {
-      "parameters": {
-        "updates": [
-          "*"
-        ]
-      },
-      "type": "n8n-nodes-telegram-polling.telegramPollingTrigger",
-      "typeVersion": 1,
-      "position": [
-        -176,
-        176
-      ],
-      "id": "99d1506d-66c2-4ce0-b314-7d8942b4adbf",
-      "name": "Telegram Trigger1",
-      "credentials": {
-        "telegramApi": {
-          "id": "HUakjpqref6diiOf",
-          "name": "Telegram account"
-        }
-      }
     }
   ],
   "pinData": {},
@@ -235,6 +214,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-09-11T01:41:21.000Z",
-  "versionId": "67282ef5-26c8-4857-9296-df7023448a38"
+  "updatedAt": "2025-10-11T02:00:50.000Z",
+  "versionId": "0dc5855c-1d41-43de-97d3-09ea843649f3"
 }
