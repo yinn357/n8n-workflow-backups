@@ -1,0 +1,140 @@
+{
+  "active": false,
+  "connections": {
+    "sub-Markdown格式转换": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek-R1-Distill-Qwen-32B": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-10-11T03:46:16.265Z",
+  "id": "oNaS3jyTERrDFwj3",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "sub-ToMarkdown",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.msg }}",
+        "options": {
+          "systemMessage": "你是一个把任何给定文本转换为 Markdown 的助手。严格不改变文本主要意思。所有图片或图表 URL（包括 quickchart.io）必须用 ![]($url) 语法。代码使用三反引号。只返回最终 Markdown，不要额外说明。中文输出。"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -80,
+        -16
+      ],
+      "id": "8813ab03-cc20-49f5-b4d8-bd561c373a70",
+      "name": "AI Agent",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "retryOnFail": false,
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "msg"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -304,
+        -16
+      ],
+      "id": "5330997c-a917-4454-a2e9-37aa2d11f485",
+      "name": "sub-Markdown格式转换"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+          "mode": "list",
+          "cachedResultName": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -8,
+        208
+      ],
+      "id": "a61de1db-5850-4f7f-a246-3e385b4a859d",
+      "name": "DeepSeek-R1-Distill-Qwen-32B",
+      "credentials": {
+        "openAiApi": {
+          "id": "f86xyna37dSYhxAZ",
+          "name": "ModelScope OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "sub-Markdown格式转换": [
+      {
+        "json": {
+          "msg": "您好！这是您近期的用电情况图表：https://quickchart.io/chart/render/zf-582e0f7a-373c-4c45-81de-4e4ba81dbda7\n\n如果您有其他关于用电的问题，随时可以问我哦！"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-10-11T03:46:16.329Z",
+      "updatedAt": "2025-10-11T03:46:16.329Z",
+      "role": "workflow:owner",
+      "workflowId": "oNaS3jyTERrDFwj3",
+      "projectId": "BeX3bor8ts20lbDK"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-07-11T02:54:27.831Z",
+      "updatedAt": "2025-07-11T03:55:43.484Z",
+      "id": "JqrpOsXNCY5fMnlD",
+      "name": "Common"
+    },
+    {
+      "createdAt": "2025-09-29T09:18:52.410Z",
+      "updatedAt": "2025-09-29T09:18:52.410Z",
+      "id": "qcCtjqIt2kHzTxCB",
+      "name": "Agent"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-11T05:55:51.000Z",
+  "versionId": "a03d9c63-2313-450e-b04c-bf245ddfce54"
+}
