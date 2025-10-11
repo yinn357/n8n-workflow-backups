@@ -1,5 +1,5 @@
 {
-  "active": false,
+  "active": true,
   "connections": {
     "子节点触发": {
       "main": [
@@ -517,7 +517,11 @@
       "projectId": "BeX3bor8ts20lbDK"
     }
   ],
-  "staticData": null,
+  "staticData": {
+    "node:每天5点": {
+      "recurrenceRules": []
+    }
+  },
   "tags": [
     {
       "createdAt": "2025-09-30T03:40:06.462Z",
@@ -526,7 +530,7 @@
       "name": "Tools"
     }
   ],
-  "triggerCount": 0,
-  "updatedAt": "2025-09-30T07:22:53.000Z",
+  "triggerCount": 1,
+  "updatedAt": "2025-10-11T06:12:58.000Z",
   "versionId": "d4325e5b-6353-478a-8a5e-1ede20d35942"
 }
