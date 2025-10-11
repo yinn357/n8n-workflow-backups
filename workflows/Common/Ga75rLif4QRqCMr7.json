@@ -270,8 +270,8 @@
       "name": "On clicking 'execute'",
       "type": "n8n-nodes-base.manualTrigger",
       "position": [
-        440,
-        260
+        448,
+        272
       ],
       "typeVersion": 1
     },
@@ -300,8 +300,8 @@
       "name": "n8n",
       "type": "n8n-nodes-base.n8n",
       "position": [
-        700,
-        340
+        704,
+        352
       ],
       "typeVersion": 1,
       "credentials": {
@@ -329,8 +329,8 @@
       "name": "Return",
       "type": "n8n-nodes-base.set",
       "position": [
-        2340,
-        840
+        2352,
+        848
       ],
       "typeVersion": 3.3
     },
@@ -387,8 +387,8 @@
       "name": "If file too large",
       "type": "n8n-nodes-base.if",
       "position": [
-        1240,
-        740
+        1248,
+        752
       ],
       "typeVersion": 2
     },
@@ -398,8 +398,8 @@
       "name": "Merge Items",
       "type": "n8n-nodes-base.merge",
       "position": [
-        1240,
-        1000
+        1248,
+        1008
       ],
       "typeVersion": 2
     },
@@ -412,7 +412,7 @@
       "type": "n8n-nodes-base.code",
       "position": [
         1440,
-        1000
+        1008
       ],
       "typeVersion": 1
     },
@@ -440,8 +440,8 @@
       "name": "Check Status",
       "type": "n8n-nodes-base.switch",
       "position": [
-        1660,
-        1000
+        1664,
+        1008
       ],
       "typeVersion": 1
     },
@@ -451,8 +451,8 @@
       "name": "Same file - Do nothing",
       "type": "n8n-nodes-base.noOp",
       "position": [
-        1880,
-        840
+        1888,
+        848
       ],
       "typeVersion": 1
     },
@@ -462,8 +462,8 @@
       "name": "File is different",
       "type": "n8n-nodes-base.noOp",
       "position": [
-        1880,
-        1000
+        1888,
+        1008
       ],
       "typeVersion": 1
     },
@@ -473,8 +473,8 @@
       "name": "File is new",
       "type": "n8n-nodes-base.noOp",
       "position": [
-        1880,
-        1160
+        1888,
+        1168
       ],
       "typeVersion": 1
     },
@@ -499,8 +499,8 @@
       "name": "Create new file",
       "type": "n8n-nodes-base.github",
       "position": [
-        2100,
-        1160
+        2112,
+        1168
       ],
       "typeVersion": 1,
       "webhookId": "d13568a4-15de-44d7-96e4-bf76347b8dc4",
@@ -533,8 +533,8 @@
       "name": "Edit existing file",
       "type": "n8n-nodes-base.github",
       "position": [
-        2100,
-        980
+        2112,
+        992
       ],
       "typeVersion": 1,
       "webhookId": "8827f1bb-2201-4219-bbb5-b38ce8b9a3de",
@@ -553,8 +553,8 @@
       "name": "Loop Over Items",
       "type": "n8n-nodes-base.splitInBatches",
       "position": [
-        900,
-        360
+        912,
+        368
       ],
       "typeVersion": 3
     },
@@ -572,8 +572,8 @@
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "position": [
-        440,
-        460
+        448,
+        464
       ],
       "typeVersion": 1.2
     },
@@ -605,7 +605,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         400,
-        180
+        192
       ],
       "typeVersion": 1
     },
@@ -632,7 +632,7 @@
       "type": "n8n-nodes-base.github",
       "position": [
         1040,
-        740
+        752
       ],
       "typeVersion": 1,
       "alwaysOutputData": true,
@@ -675,8 +675,8 @@
       "name": "Globals",
       "type": "n8n-nodes-base.set",
       "position": [
-        820,
-        900
+        832,
+        912
       ],
       "typeVersion": 3.4
     },
@@ -692,7 +692,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         800,
-        780
+        784
       ],
       "typeVersion": 1
     },
@@ -704,8 +704,8 @@
       "name": "Execute Workflow Trigger",
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "position": [
-        100,
-        1080
+        112,
+        1088
       ],
       "typeVersion": 1.1
     },
@@ -732,7 +732,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "position": [
         1120,
-        340
+        352
       ],
       "typeVersion": 1.2
     },
@@ -754,7 +754,7 @@
       "name": "/",
       "type": "n8n-nodes-base.set",
       "position": [
-        580,
+        592,
         800
       ],
       "typeVersion": 3.4
@@ -820,8 +820,8 @@
       "name": "tag?",
       "type": "n8n-nodes-base.switch",
       "position": [
-        340,
-        900
+        352,
+        912
       ],
       "typeVersion": 3.2
     }
@@ -959,6 +959,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-07-11T03:55:48.000Z",
-  "versionId": "0536bd51-f2ee-4136-a3c3-0944ed433535"
+  "updatedAt": "2025-10-11T06:43:49.000Z",
+  "versionId": "48c81310-dd3a-466f-9331-a1995f8cf0fa"
 }
