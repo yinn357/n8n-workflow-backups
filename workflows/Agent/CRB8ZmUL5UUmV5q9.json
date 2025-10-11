@@ -71,6 +71,22 @@
           }
         ]
       ]
+    },
+    "Call '用电量图表'": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Call 'sub-用电情况图表'": {
+      "ai_tool": [
+        [
+          {
+            "node": "聊天AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-09-12T01:02:33.041Z",
@@ -89,7 +105,7 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -288,
+        -304,
         -240
       ],
       "id": "ca86c1e2-65dd-46f6-a776-e12f63775938",
@@ -103,7 +119,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        -64,
+        -80,
         -16
       ],
       "id": "db600a7e-bc48-4267-93f7-6abc2abf7c9c",
@@ -121,13 +137,13 @@
         "text": "={{ $json.content }}",
         "needsFallback": true,
         "options": {
-          "systemMessage": "=# 个人人工智能助手系统提示\n\n您是一位乐于助人的个人人工智能助手，使用中文回复消息。\n\n## 您的能力\n\n您可以帮助用户进行：\n- **优先调用工具回答问题**\n- **日常对话** \n- 回答问题并提供信息\n\n## 沟通风格\n\n### 回复格式\n- 保持回复亲切友好\n- 有帮助且信息丰富\n- 符合用户的语气和交流风格\n\n### 语音消息处理\n- 当用户发送语音消息时，要像他们直接跟你说话一样自然地回复\n- 不要提及他们的消息已被转录\n- 以自然流畅的对话方式回复\n\n\n\n## 上下文感知\n\n- 记住当前的日期和时间：**今天是 {{ $now.format('cccc') }} 年 {{ $now.format('yyyy-MM-dd HH:mm') }}**\n- 利用这些信息提供相关且及时的回复\n- 适当引用“今天”“明天”“本周”等表述\n- 记住当前的位置是湖南省长沙市岳麓区\n\n## 重要指南\n\n- 利用记忆系统保持对话上下文\n- 优先调用MCP工具\n- 当请求不明确时，提出澄清问题\n- 尊重隐私——仅在与请求相关时访问信息\n- 如果无法提供帮助，建议替代方案或引导至您可提供的能力范围内\n\n记住：你是私人助理，所以要亲切、乐于助人，并专注于让用户的每一天都更轻松、更井井有条。\n\n今天是{{ $now.format('cccc') }}，日期为{{ $now.format('yyyy年MM月dd日 HH时mm分') }}。获取天气等需要位置信息时，使用当前的位置。"
+          "systemMessage": "=# 个人人工智能助手系统提示\n\n您是一位乐于助人的个人人工智能助手，使用中文回复消息。回复消息的格式使用Markdown。\n\n## 您的能力\n\n您可以帮助用户进行：\n- **优先调用工具回答问题**\n- **日常对话** \n- 回答问题并提供信息\n\n## 沟通风格\n\n### 回复格式\n- 用Markdown格式回复\n- 保持回复亲切友好\n- 有帮助且信息丰富\n- 符合用户的语气和交流风格\n\n### 语音消息处理\n- 当用户发送语音消息时，要像他们直接跟你说话一样自然地回复\n- 不要提及他们的消息已被转录\n- 以自然流畅的对话方式回复\n\n### 回复信息中URL处理\n- **图片URL一定要使用Markdown语法 `![]($url)`**\n- **`quickchart.io`域名下的URL也属于图片**\n- **其他chart的URL也需要使用`![]($url)` 语法**\n\n\n## 上下文感知\n\n- 记住当前的日期和时间：**今天是 {{ $now.format('cccc') }} 年 {{ $now.format('yyyy-MM-dd HH:mm') }}**\n- 利用这些信息提供相关且及时的回复\n- 适当引用“今天”“明天”“本周”等表述\n- 记住当前的位置是湖南省长沙市岳麓区\n\n## 重要指南\n\n- 利用记忆系统保持对话上下文\n- 一定要使用Markdown格式回复消息\n- 优先调用MCP工具\n- 当请求不明确时，提出澄清问题\n- 如果无法提供帮助，建议替代方案或引导至您可提供的能力范围内\n\n记住：你是私人助理，所以要亲切、乐于助人，并专注于让用户的每一天都更轻松、更井井有条。\n\n今天是{{ $now.format('cccc') }}，日期为{{ $now.format('yyyy年MM月dd日 HH时mm分') }}。获取天气等需要位置信息时，使用当前的位置。"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.2,
       "position": [
-        120,
+        168,
         -240
       ],
       "id": "57b7cd53-c9bb-4566-96e9-4ece9b93eed4",
@@ -142,7 +158,7 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        192,
+        176,
         -16
       ],
       "id": "9c22221c-4075-41dc-b6a8-fc83477b29c1",
@@ -159,7 +175,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
       "typeVersion": 1.1,
       "position": [
-        320,
+        304,
         -16
       ],
       "id": "c9ac8278-ea64-45ea-a496-7bbf61a80cd0",
@@ -176,7 +192,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
       "typeVersion": 1.1,
       "position": [
-        -288,
+        -304,
         88
       ],
       "id": "9cc30d2d-071c-4290-ae0e-8ef3412fbfd2",
@@ -195,7 +211,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        64,
+        48,
         -16
       ],
       "id": "50783be0-5daf-4674-916f-6cf9b1c55f94",
@@ -218,11 +234,59 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
       "typeVersion": 1.1,
       "position": [
-        448,
+        432,
         -16
       ],
       "id": "321b1abd-412a-4b48-9e03-c9858667fc56",
       "name": "天气 OpenWeather MCP Client1"
+    },
+    {
+      "parameters": {
+        "description": "=# 用电情况查询工具\n\n## 重要指南\n- 只能查询家里国家电网每日用电\n- 调用后会向钉钉发送近期用电情况柱状图\n- 工具返回结果为是否发送成功\n- 记住当前的日期和时间：**今天是 {{ $now.format('cccc') }} 年 {{ $now.format('yyyy-MM-dd HH:mm') }}**",
+        "workflowId": {
+          "__rl": true,
+          "value": "oBNVSfYLOHqo7LpZ",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/oBNVSfYLOHqo7LpZ",
+          "cachedResultName": "用电量图表"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -304,
+        296
+      ],
+      "id": "e71e2580-d354-44d2-b62e-a01806bc1bb9",
+      "name": "Call '用电量图表'"
+    },
+    {
+      "parameters": {
+        "description": "=# 用电情况查询工具\n\n## 重要指南\n- 只能查询家里国家电网用电情况\n- 调用后会生成近期用电情况柱状图\n- 工具返回结果为柱状图URL\n- 记住当前的日期和时间：**今天是 {{ $now.format('cccc') }} 年 {{ $now.format('yyyy-MM-dd HH:mm') }}**",
+        "workflowId": {
+          "__rl": true,
+          "value": "iT9mP6160h6LOjwb",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/iT9mP6160h6LOjwb",
+          "cachedResultName": "sub-用电情况图表"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        -16
+      ],
+      "id": "36983dc7-38ad-4812-b1d4-f1472274b752",
+      "name": "Call 'sub-用电情况图表'"
     }
   ],
   "pinData": {
@@ -230,7 +294,7 @@
       {
         "json": {
           "memoryKey": "key1",
-          "content": "长沙未来5天天气"
+          "content": "用电情况"
         }
       }
     ]
@@ -257,6 +321,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-09-29T09:21:01.000Z",
-  "versionId": "af7932bd-9360-4186-85fd-f702bfd2659c"
+  "updatedAt": "2025-10-11T03:41:04.000Z",
+  "versionId": "00702877-2f2a-487b-bc10-06783fb60bbd"
 }
