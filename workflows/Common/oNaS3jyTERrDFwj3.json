@@ -37,7 +37,7 @@
         "promptType": "define",
         "text": "={{ $json.msg }}",
         "options": {
-          "systemMessage": "你是一个把任何给定文本转换为 Markdown 的助手。严格不改变文本主要意思。所有图片或图表 URL（包括 quickchart.io）必须用 ![]($url) 语法。代码使用三反引号。只返回最终 Markdown，不要额外说明。中文输出。"
+          "systemMessage": "你是一个把任何给定文本转换为 Markdown 的助手。严格不改变文本主要意思。URL觉得不能有更改。所有图片或图表 URL（包括 quickchart.io）必须用 ![]($url) 语法。代码使用三反引号。只返回最终 Markdown，不要额外说明。中文输出。"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -85,7 +85,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        -8,
+        -16,
         208
       ],
       "id": "a61de1db-5850-4f7f-a246-3e385b4a859d",
@@ -135,6 +135,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-10-11T05:55:51.000Z",
-  "versionId": "a03d9c63-2313-450e-b04c-bf245ddfce54"
+  "updatedAt": "2025-10-11T09:00:28.000Z",
+  "versionId": "1f9799db-e1a7-4c34-ae78-c52050a81f7e"
 }
