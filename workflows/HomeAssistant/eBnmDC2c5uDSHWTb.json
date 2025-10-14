@@ -1,5 +1,5 @@
 {
-  "active": true,
+  "active": false,
   "connections": {
     "监听HA所有事件": {
       "main": [
@@ -382,6 +382,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-09-30T09:43:08.000Z",
+  "updatedAt": "2025-10-14T03:54:17.000Z",
   "versionId": "500a5e51-3fd2-4a15-951a-c96548fb625f"
 }
