@@ -1,0 +1,152 @@
+{
+  "active": false,
+  "connections": {
+    "clash_cczzuu": {
+      "main": [
+        [
+          {
+            "node": "获取cczzuu每日yml",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "获取cczzuu每日yml": {
+      "main": [
+        [
+          {
+            "node": "响应二进制文件",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-10-14T03:50:15.354Z",
+  "id": "plfpqngKwzOl0ax7",
+  "isArchived": false,
+  "meta": null,
+  "name": "cczzuu-clash",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "clash_cczzuu",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -256,
+        -16
+      ],
+      "id": "c3b23b46-e123-454b-8a73-6daf63f65b68",
+      "name": "clash_cczzuu",
+      "webhookId": "a31ed992-c802-41d4-83a7-38ffd0365888"
+    },
+    {
+      "parameters": {
+        "url": "=http://dayssr.cczzuu.top/node/{{ $now.format('yyyyMMdd') }}-clash.yaml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -48,
+        -16
+      ],
+      "id": "9887fde7-10a3-4f2a-87d8-5a5fe648c910",
+      "name": "获取cczzuu每日yml"
+    },
+    {
+      "parameters": {
+        "respondWith": "binary",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/yaml"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        160,
+        -16
+      ],
+      "id": "743070df-ba77-4047-bd24-1081a999e316",
+      "name": "响应二进制文件"
+    }
+  ],
+  "pinData": {
+    "clash_cczzuu": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.yinn.eu.org",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "accept-encoding": "gzip, br",
+            "accept-language": "zh-CN,zh;q=0.9",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "2001:19f0:7001:58ee:5400:5ff:fe2d:dd74",
+            "cf-ipcountry": "JP",
+            "cf-ray": "98e499d93a66d76c-NRT",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-warp-tag-id": "865e442f-8b25-4355-8944-dcae794439f7",
+            "connection": "keep-alive",
+            "priority": "u=0, i",
+            "sec-ch-ua": "\"Microsoft Edge\";v=\"141\", \"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"141\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "none",
+            "sec-fetch-user": "?1",
+            "upgrade-insecure-requests": "1",
+            "x-forwarded-for": "2001:19f0:7001:58ee:5400:5ff:fe2d:dd74",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {},
+          "webhookUrl": "https://n8n.yinn.eu.org/webhook-test/clash_cczzuu",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "vI7EThg6H9bW1f4v"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-10-14T03:50:15.376Z",
+      "updatedAt": "2025-10-14T03:50:15.376Z",
+      "role": "workflow:owner",
+      "workflowId": "plfpqngKwzOl0ax7",
+      "projectId": "BeX3bor8ts20lbDK"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-14T03:50:20.503Z",
+      "updatedAt": "2025-10-14T03:50:20.503Z",
+      "id": "Y3IhKS5IWaXWFYKW",
+      "name": "VPN"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2025-10-14T05:51:17.000Z",
+  "versionId": "c99713ca-5ce7-4648-8d8d-8fa347896134"
+}
