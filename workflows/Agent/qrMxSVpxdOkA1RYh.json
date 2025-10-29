@@ -168,8 +168,8 @@
   },
   "shared": [
     {
-      "createdAt": "2025-09-29T09:18:57.071Z",
       "updatedAt": "2025-09-29T09:18:57.071Z",
+      "createdAt": "2025-09-29T09:18:57.071Z",
       "role": "workflow:owner",
       "workflowId": "qrMxSVpxdOkA1RYh",
       "projectId": "BeX3bor8ts20lbDK"
@@ -178,8 +178,8 @@
   "staticData": null,
   "tags": [
     {
-      "createdAt": "2025-09-29T09:18:52.410Z",
       "updatedAt": "2025-09-29T09:18:52.410Z",
+      "createdAt": "2025-09-29T09:18:52.410Z",
       "id": "qcCtjqIt2kHzTxCB",
       "name": "Agent"
     }
