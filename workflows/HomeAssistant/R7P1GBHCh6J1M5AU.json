@@ -134,7 +134,11 @@
     },
     {
       "parameters": {
-        "resource": "service"
+        "resource": "log",
+        "operation": "getLogbookEntries",
+        "additionalFields": {
+          "entityId": "event.xiaomi_cn_1079853347_hub1_virtual_event_e_4_1"
+        }
       },
       "type": "n8n-nodes-base.homeAssistant",
       "typeVersion": 1,
@@ -143,7 +147,7 @@
         80
       ],
       "id": "f38e76ff-f20f-4ee0-9166-c4bd68960bb5",
-      "name": "Get many services",
+      "name": "Get all logs for an entity",
       "credentials": {
         "homeAssistantApi": {
           "id": "6EZ5GmsOjYCFa9Qg",
@@ -236,6 +240,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-09-30T09:32:24.000Z",
-  "versionId": "75979556-045f-4907-9fbe-48d162673c21"
+  "updatedAt": "2025-11-04T09:00:18.000Z",
+  "versionId": "4ff1e4e1-c826-4deb-82e2-77bd7bdc467a"
 }
