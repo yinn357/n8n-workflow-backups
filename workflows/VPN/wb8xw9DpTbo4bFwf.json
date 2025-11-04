@@ -1,5 +1,5 @@
 {
-  "active": false,
+  "active": true,
   "connections": {
     "获取README.md": {
       "main": [
@@ -27,6 +27,11 @@
       "main": [
         [
           {
+            "node": "Call 'sub-钉钉通知'",
+            "type": "main",
+            "index": 0
+          },
+          {
             "node": "获取yml配置文件",
             "type": "main",
             "index": 0
@@ -35,6 +40,22 @@
       ]
     },
     "获取yml配置文件": {
+      "main": [
+        []
+      ]
+    },
+    "定时": {
+      "main": [
+        [
+          {
+            "node": "获取README.md",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'sub-钉钉通知'": {
       "main": [
         []
       ]
@@ -55,7 +76,7 @@
       "typeVersion": 4.2,
       "position": [
         208,
-        0
+        -64
       ],
       "id": "6a98cea5-6922-4a95-a2c6-4e938546297d",
       "name": "获取README.md"
@@ -69,11 +90,12 @@
       "typeVersion": 2.1,
       "position": [
         -16,
-        0
+        -160
       ],
       "id": "5618407e-0f37-4ab8-a8e0-49b0bf0115a9",
       "name": "crossxx_clash",
-      "webhookId": "3572e004-9f59-450b-8655-805dd1718a19"
+      "webhookId": "3572e004-9f59-450b-8655-805dd1718a19",
+      "disabled": true
     },
     {
       "parameters": {
@@ -84,23 +106,138 @@
       "typeVersion": 4.2,
       "position": [
         656,
-        0
+        -160
       ],
       "id": "7f66adce-e477-47e8-9de8-0915b97a9dec",
-      "name": "获取yml配置文件"
+      "name": "获取yml配置文件",
+      "disabled": true
     },
     {
       "parameters": {
-        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  // 定义正则表达式，匹配每一行数据\n  const regex = /免费\\s+([A-Za-z0-9]+)\\s*\\|\\s*`([^`]+)`/g;\n  const rawText = item.json.data\n  // 存储结果的对象\n  const result = {};\n\n  let match;\n  while ((match = regex.exec(rawText)) !== null) {\n    const type = match[1].trim();        \n    // 类型：SSR, VMess, Hysteria2  \n    const url = match[2].trim();         \n    // URL\n    result[type.toLowerCase()] = url;\n  }\n  item.json = {...result}\n}\n\nreturn $input.all();"
+        "jsCode": "for (const item of $input.all()) {\n  const rawText = item.json.data;\n\n  // 提取订阅链接\n  const regex = /免费\\s+([A-Za-z0-9]+)\\s*\\|\\s*`([^`]+)`/g;\n  const result = {};\n\n  let match;\n  while ((match = regex.exec(rawText)) !== null) {\n    const type = match[1].trim();\n    const url = match[2].trim();\n    result[type.toLowerCase()] = url;\n  }\n\n  // 提取上次更新时间和过期时间\n  const lastUpdatedMatch = rawText.match(/上一次更新时间：(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})/);\n  const expiresAtMatch = rawText.match(/订阅过期时间：(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})/);\n\n  if (lastUpdatedMatch) {\n    result.last_updated = lastUpdatedMatch[1];\n  }\n  if (expiresAtMatch) {\n    result.expires_at = expiresAtMatch[1];\n  }\n\n  item.json = result;\n}\n\nreturn $input.all();"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         432,
-        0
+        -64
       ],
       "id": "ee9a900c-4415-4db1-8303-cd68434df9ec",
       "name": "提取yml源链接"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 15 8,12 * * *"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -16,
+        32
+      ],
+      "id": "70da9914-0fe4-4746-be29-4b5d9e296b1e",
+      "name": "定时"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "4tHTAEVO9ryUxOhn",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/4tHTAEVO9ryUxOhn",
+          "cachedResultName": "sub-钉钉通知"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "msgtype": "md",
+            "content": "=\n- ssr: {{ $json.ssr }}\n- vmess: {{ $json.vmess }}\n- hysteria2: {{ $json.hysteria2 }}\n\n> 过期时间: {{ $json.expires_at }}",
+            "title": "免费Clash订阅",
+            "name": "免费Clash订阅"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "msgtype",
+              "displayName": "msgtype",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "sessionWebhook",
+              "displayName": "sessionWebhook",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "state",
+              "displayName": "state",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        656,
+        32
+      ],
+      "id": "a2c20a5e-e1e7-428f-a703-dab5e6ebe1cd",
+      "name": "Call 'sub-钉钉通知'"
     }
   ],
   "pinData": {
@@ -155,7 +292,11 @@
       "projectId": "BeX3bor8ts20lbDK"
     }
   ],
-  "staticData": null,
+  "staticData": {
+    "node:定时": {
+      "recurrenceRules": []
+    }
+  },
   "tags": [
     {
       "updatedAt": "2025-10-14T03:50:20.503Z",
@@ -164,7 +305,7 @@
       "name": "VPN"
     }
   ],
-  "triggerCount": 0,
-  "updatedAt": "2025-10-15T01:30:30.000Z",
-  "versionId": "287636ec-7954-4e79-99a3-6c3d08325754"
+  "triggerCount": 1,
+  "updatedAt": "2025-11-04T08:08:55.000Z",
+  "versionId": "a2912799-5ada-48e2-bcf5-39cd93f63825"
 }
