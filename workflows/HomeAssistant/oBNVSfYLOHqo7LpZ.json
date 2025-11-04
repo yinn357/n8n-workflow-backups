@@ -12,22 +12,22 @@
         ]
       ]
     },
-    "每三天9点10": {
+    "sub-用电情况图表": {
       "main": [
         [
           {
-            "node": "sub-用电情况图表",
+            "node": "markdown-钉钉通知",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "sub-用电情况图表": {
+    "每天9点10": {
       "main": [
         [
           {
-            "node": "markdown-钉钉通知",
+            "node": "sub-用电情况图表",
             "type": "main",
             "index": 0
           }
@@ -132,27 +132,6 @@
     },
     {
       "parameters": {
-        "rule": {
-          "interval": [
-            {
-              "daysInterval": 3,
-              "triggerAtHour": 9,
-              "triggerAtMinute": 10
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.scheduleTrigger",
-      "typeVersion": 1.2,
-      "position": [
-        -544,
-        0
-      ],
-      "id": "1675a9c2-a96e-4f96-a884-d141b4d6eeea",
-      "name": "每三天9点10"
-    },
-    {
-      "parameters": {
         "workflowId": {
           "__rl": true,
           "value": "iT9mP6160h6LOjwb",
@@ -179,6 +158,26 @@
       ],
       "id": "5ec18507-12d7-4649-8b50-2c7bd532795f",
       "name": "sub-用电情况图表"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9,
+              "triggerAtMinute": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -544,
+        0
+      ],
+      "id": "1675a9c2-a96e-4f96-a884-d141b4d6eeea",
+      "name": "每天9点10"
     }
   ],
   "pinData": {},
@@ -201,6 +200,9 @@
       "recurrenceRules": [
         275
       ]
+    },
+    "node:每天9点10": {
+      "recurrenceRules": []
     }
   },
   "tags": [
@@ -212,6 +214,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-09-10T03:09:01.000Z",
-  "versionId": "a597d74d-3e30-45d6-ae4f-a9b54b881f41"
+  "updatedAt": "2025-11-04T08:11:05.000Z",
+  "versionId": "4c8e1aba-a1b0-44a6-a2cd-25a0ce06a1df"
 }
