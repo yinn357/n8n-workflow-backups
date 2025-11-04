@@ -464,7 +464,8 @@
         256
       ],
       "id": "49c6f62c-4d95-4521-ac5c-54fb3d564a93",
-      "name": "触发通知-子流程"
+      "name": "触发通知-子流程",
+      "disabled": true
     },
     {
       "parameters": {
@@ -493,7 +494,10 @@
   "settings": {
     "executionOrder": "v1",
     "callerPolicy": "workflowsFromSameOwner",
-    "errorWorkflow": "vI7EThg6H9bW1f4v"
+    "errorWorkflow": "vI7EThg6H9bW1f4v",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "availableInMCP": false
   },
   "shared": [
     {
@@ -526,6 +530,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-09-10T01:50:17.000Z",
-  "versionId": "50777c34-448a-4dd7-bead-dbade6de15e8"
+  "updatedAt": "2025-11-04T12:04:29.000Z",
+  "versionId": "bd609374-05b1-4ff9-855c-09d7983d3ba0"
 }
