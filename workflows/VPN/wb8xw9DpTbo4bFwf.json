@@ -41,7 +41,13 @@
     },
     "获取yml配置文件": {
       "main": [
-        []
+        [
+          {
+            "node": "YAML",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "定时": {
@@ -94,13 +100,14 @@
       ],
       "id": "5618407e-0f37-4ab8-a8e0-49b0bf0115a9",
       "name": "crossxx_clash",
-      "webhookId": "3572e004-9f59-450b-8655-805dd1718a19",
-      "disabled": true
+      "webhookId": "3572e004-9f59-450b-8655-805dd1718a19"
     },
     {
       "parameters": {
         "url": "={{ $json[($('crossxx_clash').item.json?.query?.type ||'vmess')] }}  ",
-        "options": {}
+        "options": {
+          "proxy": "192.168.101.100:7890"
+        }
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -131,7 +138,7 @@
           "interval": [
             {
               "field": "cronExpression",
-              "expression": "0 15 8,12 * * *"
+              "expression": "0 15 8,12,20 * * *"
             }
           ]
         }
@@ -157,8 +164,8 @@
         "workflowInputs": {
           "mappingMode": "defineBelow",
           "value": {
-            "msgtype": "md",
-            "content": "=\n- ssr: {{ $json.ssr }}\n- vmess: {{ $json.vmess }}\n- hysteria2: {{ $json.hysteria2 }}\n\n> 过期时间: {{ $json.expires_at }}",
+            "msgtype": "text",
+            "content": "=- ssr: {{ $json.ssr }}\n- vmess: {{ $json.vmess }}\n- hysteria2: {{ $json.hysteria2 }}\n\n> 过期时间: {{ $json.expires_at }}",
             "title": "免费Clash订阅",
             "name": "免费Clash订阅"
           },
@@ -238,6 +245,20 @@
       ],
       "id": "a2c20a5e-e1e7-428f-a703-dab5e6ebe1cd",
       "name": "Call 'sub-钉钉通知'"
+    },
+    {
+      "parameters": {
+        "value": "={{ $json.data }}"
+      },
+      "type": "n8n-nodes-yaml.yaml",
+      "typeVersion": 1,
+      "position": [
+        864,
+        -160
+      ],
+      "id": "2b19118d-8541-4e64-83d9-538e35d8c8a5",
+      "name": "YAML",
+      "disabled": true
     }
   ],
   "pinData": {
@@ -278,6 +299,17 @@
           "executionMode": "test"
         }
       }
+    ],
+    "提取yml源链接": [
+      {
+        "json": {
+          "ssr": "https://clash.crossxx.com/sub/ssr/1762315203",
+          "vmess": "https://clash.crossxx.com/sub/vmess/1762315203",
+          "hysteria2": "https://clash.crossxx.com/sub/hysteria/1762315203",
+          "last_updated": "2025-11-05 12:00:03",
+          "expires_at": "2025-11-05 16:00:03"
+        }
+      }
     ]
   },
   "settings": {
@@ -305,7 +337,7 @@
       "name": "VPN"
     }
   ],
-  "triggerCount": 1,
-  "updatedAt": "2025-11-04T08:08:55.000Z",
-  "versionId": "a2912799-5ada-48e2-bcf5-39cd93f63825"
+  "triggerCount": 2,
+  "updatedAt": "2025-11-05T06:26:33.000Z",
+  "versionId": "eef0945d-14e8-4164-a499-3b74c146ce87"
 }
