@@ -605,6 +605,22 @@
           "name": "43907800 GitHub account"
         }
       }
+    },
+    {
+      "parameters": {
+        "url": "https://clash.crossxx.com/sub/vmess/1762315203",
+        "options": {
+          "proxy": "192.168.101.100:7890"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -48,
+        304
+      ],
+      "id": "c3f948ed-0a2a-42ca-9fdc-417652f50f91",
+      "name": "HTTP Request"
     }
   ],
   "pinData": {
@@ -796,6 +812,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2025-09-01T03:37:49.000Z",
-  "versionId": "9e11c3d4-2100-4f05-b177-92eec8f0b5b0"
+  "updatedAt": "2025-11-05T06:10:05.000Z",
+  "versionId": "dfb558b8-4321-45d1-93b1-38d14db18e51"
 }
