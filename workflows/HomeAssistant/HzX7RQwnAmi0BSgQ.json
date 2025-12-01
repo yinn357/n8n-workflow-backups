@@ -181,7 +181,7 @@
           "interval": [
             {
               "field": "cronExpression",
-              "expression": "15 15 9,19 * * *"
+              "expression": "55 55 8,19 * * *"
             }
           ]
         }
@@ -330,6 +330,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-09-22T07:09:32.000Z",
-  "versionId": "2b7e07d3-a6de-49dc-9d34-476d8b6994e0"
+  "updatedAt": "2025-12-01T03:52:03.000Z",
+  "versionId": "b902fa60-3624-4997-a819-0f4bb406d886"
 }
