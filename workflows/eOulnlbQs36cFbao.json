@@ -1,0 +1,329 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Backup credentials",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Backup workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backup credentials": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backup workflows": {
+      "main": [
+        [
+          {
+            "node": "Upload file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Backup workflows",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Backup credentials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Restore credentials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission1": {
+      "main": [
+        [
+          {
+            "node": "Restore workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-09T07:49:55.605Z",
+  "id": "eOulnlbQs36cFbao",
+  "isArchived": false,
+  "meta": null,
+  "name": "backup",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        112
+      ],
+      "id": "dfc37d11-d177-4c2a-98e4-3c5eb92be225",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-backup-credentials.backupCredential",
+      "typeVersion": 1,
+      "position": [
+        48,
+        112
+      ],
+      "id": "65283b6f-5a64-4ec9-bf14-77e2000c5723",
+      "name": "Backup credentials"
+    },
+    {
+      "parameters": {
+        "name": "=ba-credential-{{ $now.format('yyyy-MM-dd') }}.json",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/folders/1mJFDvlQUeE_0_zO7R6ESwb_5HaJNteEQ",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        256,
+        112
+      ],
+      "id": "7037b134-b453-417e-a31a-534b8004d4dc",
+      "name": "Upload file"
+    },
+    {
+      "parameters": {
+        "operation": "backupWorkflows"
+      },
+      "type": "n8n-nodes-backup-credentials.backupCredential",
+      "typeVersion": 1,
+      "position": [
+        64,
+        320
+      ],
+      "id": "828df9e5-caf9-46a3-9267-aa54bd22254a",
+      "name": "Backup workflows"
+    },
+    {
+      "parameters": {
+        "name": "=ba-workflows-{{ $now.format('yyyy-MM-dd') }}.json",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/folders/1mJFDvlQUeE_0_zO7R6ESwb_5HaJNteEQ",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        256,
+        320
+      ],
+      "id": "2f2c6e2e-52e0-459b-ab02-5a736d033466",
+      "name": "Upload file1"
+    },
+    {
+      "parameters": {
+        "content": "## Backup",
+        "height": 416,
+        "width": 688
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -192,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "c9f95c99-6c10-4048-9556-61b51c39e840",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -160,
+        320
+      ],
+      "id": "ad9e9a64-320f-49f3-82f9-3e5f20cdd31d",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "formTitle": "Restore Credentials",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "data",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -160,
+        576
+      ],
+      "id": "e8c035af-0a82-43e0-8f30-2db06970783b",
+      "name": "On form submission",
+      "webhookId": "9fa278c9-d849-4c06-a0f2-22bf883c9f6d"
+    },
+    {
+      "parameters": {
+        "operation": "restoreCredentials"
+      },
+      "type": "n8n-nodes-backup-credentials.backupCredential",
+      "typeVersion": 1,
+      "position": [
+        64,
+        576
+      ],
+      "id": "5e00b828-837c-453a-999f-b281dd2bca9e",
+      "name": "Restore credentials"
+    },
+    {
+      "parameters": {
+        "formTitle": "Restore Workflow",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "data",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -160,
+        864
+      ],
+      "id": "a67d247d-af25-44c4-89f1-5038af8db972",
+      "name": "On form submission1",
+      "webhookId": "af211e39-baf7-4fca-80ab-ed6e0e9cca57"
+    },
+    {
+      "parameters": {
+        "operation": "restoreWorkflows"
+      },
+      "type": "n8n-nodes-backup-credentials.backupCredential",
+      "typeVersion": 1,
+      "position": [
+        64,
+        864
+      ],
+      "id": "70e328ca-5851-448f-8bd6-fa470076d58e",
+      "name": "Restore workflows"
+    },
+    {
+      "parameters": {
+        "content": "## Restore Credentials",
+        "height": 240,
+        "width": 688
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -192,
+        496
+      ],
+      "typeVersion": 1,
+      "id": "b09ef606-c597-4eba-884b-bdfe9717163e",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Restore Workflows",
+        "height": 240,
+        "width": 688
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -192,
+        784
+      ],
+      "typeVersion": 1,
+      "id": "abb7df50-5273-409c-9943-3c57b029d1ec",
+      "name": "Sticky Note2"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-09T07:49:55.627Z",
+      "createdAt": "2025-12-09T07:49:55.627Z",
+      "role": "workflow:owner",
+      "workflowId": "eOulnlbQs36cFbao",
+      "projectId": "BeX3bor8ts20lbDK"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-09T07:49:59.105Z",
+  "versionId": "a1fdd09c-8966-4fb8-97f5-337a3938e10d"
+}
