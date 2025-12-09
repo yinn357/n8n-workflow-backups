@@ -1,5 +1,271 @@
 {
   "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-12-01T04:01:32.814Z",
+    "createdAt": "2025-12-01T04:01:32.814Z",
+    "versionId": "eef0945d-14e8-4164-a499-3b74c146ce87",
+    "workflowId": "wb8xw9DpTbo4bFwf",
+    "nodes": [
+      {
+        "parameters": {
+          "url": "https://cdn.jsdelivr.net/gh/crossxx-labs/free-proxy@main/README.md",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          208,
+          -64
+        ],
+        "id": "6a98cea5-6922-4a95-a2c6-4e938546297d",
+        "name": "获取README.md"
+      },
+      {
+        "parameters": {
+          "path": "crossxx_clash",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -16,
+          -160
+        ],
+        "id": "5618407e-0f37-4ab8-a8e0-49b0bf0115a9",
+        "name": "crossxx_clash",
+        "webhookId": "3572e004-9f59-450b-8655-805dd1718a19"
+      },
+      {
+        "parameters": {
+          "url": "={{ $json[($('crossxx_clash').item.json?.query?.type ||'vmess')] }}  ",
+          "options": {
+            "proxy": "192.168.101.100:7890"
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          656,
+          -160
+        ],
+        "id": "7f66adce-e477-47e8-9de8-0915b97a9dec",
+        "name": "获取yml配置文件",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "jsCode": "for (const item of $input.all()) {\n  const rawText = item.json.data;\n\n  // 提取订阅链接\n  const regex = /免费\\s+([A-Za-z0-9]+)\\s*\\|\\s*`([^`]+)`/g;\n  const result = {};\n\n  let match;\n  while ((match = regex.exec(rawText)) !== null) {\n    const type = match[1].trim();\n    const url = match[2].trim();\n    result[type.toLowerCase()] = url;\n  }\n\n  // 提取上次更新时间和过期时间\n  const lastUpdatedMatch = rawText.match(/上一次更新时间：(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})/);\n  const expiresAtMatch = rawText.match(/订阅过期时间：(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})/);\n\n  if (lastUpdatedMatch) {\n    result.last_updated = lastUpdatedMatch[1];\n  }\n  if (expiresAtMatch) {\n    result.expires_at = expiresAtMatch[1];\n  }\n\n  item.json = result;\n}\n\nreturn $input.all();"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          432,
+          -64
+        ],
+        "id": "ee9a900c-4415-4db1-8303-cd68434df9ec",
+        "name": "提取yml源链接"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "0 15 8,12,20 * * *"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -16,
+          32
+        ],
+        "id": "70da9914-0fe4-4746-be29-4b5d9e296b1e",
+        "name": "定时"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "4tHTAEVO9ryUxOhn",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/4tHTAEVO9ryUxOhn",
+            "cachedResultName": "sub-钉钉通知"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "msgtype": "text",
+              "content": "=- ssr: {{ $json.ssr }}\n- vmess: {{ $json.vmess }}\n- hysteria2: {{ $json.hysteria2 }}\n\n> 过期时间: {{ $json.expires_at }}",
+              "title": "免费Clash订阅",
+              "name": "免费Clash订阅"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "msgtype",
+                "displayName": "msgtype",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "sessionWebhook",
+                "displayName": "sessionWebhook",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "content",
+                "displayName": "content",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "title",
+                "displayName": "title",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "name",
+                "displayName": "name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "state",
+                "displayName": "state",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          656,
+          32
+        ],
+        "id": "a2c20a5e-e1e7-428f-a703-dab5e6ebe1cd",
+        "name": "Call 'sub-钉钉通知'"
+      },
+      {
+        "parameters": {
+          "value": "={{ $json.data }}"
+        },
+        "type": "n8n-nodes-yaml.yaml",
+        "typeVersion": 1,
+        "position": [
+          864,
+          -160
+        ],
+        "id": "2b19118d-8541-4e64-83d9-538e35d8c8a5",
+        "name": "YAML",
+        "disabled": true
+      }
+    ],
+    "connections": {
+      "获取README.md": {
+        "main": [
+          [
+            {
+              "node": "提取yml源链接",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "crossxx_clash": {
+        "main": [
+          [
+            {
+              "node": "获取README.md",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "提取yml源链接": {
+        "main": [
+          [
+            {
+              "node": "Call 'sub-钉钉通知'",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "获取yml配置文件",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "获取yml配置文件": {
+        "main": [
+          [
+            {
+              "node": "YAML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "定时": {
+        "main": [
+          [
+            {
+              "node": "获取README.md",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'sub-钉钉通知'": {
+        "main": [
+          []
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "eef0945d-14e8-4164-a499-3b74c146ce87",
   "connections": {
     "获取README.md": {
       "main": [
