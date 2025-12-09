@@ -1,5 +1,514 @@
 {
   "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-12-01T04:01:32.814Z",
+    "createdAt": "2025-12-01T04:01:32.814Z",
+    "versionId": "d4325e5b-6353-478a-8a5e-1ede20d35942",
+    "workflowId": "zyxF4yvJmtpjty4W",
+    "nodes": [
+      {
+        "parameters": {
+          "url": "https://kt4t2b53xh.re.qweatherapi.com/v7/weather/7d?location=101250109",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "X-QW-Api-Key",
+                "value": "3dfea7b0a31e4df3a3a5de5c88190d09"
+              }
+            ]
+          },
+          "options": {
+            "timeout": 10000
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -160,
+          -48
+        ],
+        "id": "26411e39-a136-4a83-91be-99e25935322a",
+        "name": "每日天气预报 qweather"
+      },
+      {
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "startSate"
+              },
+              {
+                "name": "endDate"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -384,
+          -144
+        ],
+        "id": "4bc961cb-ea91-4afb-8a47-11a9df7a6937",
+        "name": "子节点触发"
+      },
+      {
+        "parameters": {
+          "jsCode": "return $input.all().flatMap(item => {\n  let daily = item.json?.daily || [];\n  return daily.map(d => {\n    return { json: d };\n  });\n});\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          64,
+          -48
+        ],
+        "id": "62a5ee0e-c52f-41b4-a3e4-8180b36acbd6",
+        "name": "天气结果处理",
+        "executeOnce": false,
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "dataTableId": {
+            "__rl": true,
+            "value": "ZiLYxPGILY5BHbkh",
+            "mode": "list",
+            "cachedResultName": "weather_day",
+            "cachedResultUrl": "/projects/BeX3bor8ts20lbDK/datatables/ZiLYxPGILY5BHbkh"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "fxDate",
+                "keyValue": "={{ $json.fxDate }}"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "autoMapInputData",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "fxDate",
+                "displayName": "fxDate",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "sunrise",
+                "displayName": "sunrise",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "sunset",
+                "displayName": "sunset",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "moonrise",
+                "displayName": "moonrise",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "moonset",
+                "displayName": "moonset",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "moonPhase",
+                "displayName": "moonPhase",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "moonPhaseIcon",
+                "displayName": "moonPhaseIcon",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "tempMax",
+                "displayName": "tempMax",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "tempMin",
+                "displayName": "tempMin",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "iconDay",
+                "displayName": "iconDay",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "textDay",
+                "displayName": "textDay",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "iconNight",
+                "displayName": "iconNight",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "textNight",
+                "displayName": "textNight",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "wind360Day",
+                "displayName": "wind360Day",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "windDirDay",
+                "displayName": "windDirDay",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "windScaleDay",
+                "displayName": "windScaleDay",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "windSpeedDay",
+                "displayName": "windSpeedDay",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "wind360Night",
+                "displayName": "wind360Night",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "windDirNight",
+                "displayName": "windDirNight",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "windScaleNight",
+                "displayName": "windScaleNight",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "windSpeedNight",
+                "displayName": "windSpeedNight",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "humidity",
+                "displayName": "humidity",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "precip",
+                "displayName": "precip",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "pressure",
+                "displayName": "pressure",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "vis",
+                "displayName": "vis",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "cloud",
+                "displayName": "cloud",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "uvIndex",
+                "displayName": "uvIndex",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          288,
+          -48
+        ],
+        "id": "ec0c9f20-79c8-4938-990d-50ef27197db1",
+        "name": "Upsert 每日天气"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "ZiLYxPGILY5BHbkh",
+            "mode": "list",
+            "cachedResultName": "weather_day",
+            "cachedResultUrl": "/projects/BeX3bor8ts20lbDK/datatables/ZiLYxPGILY5BHbkh"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "fxDate",
+                "condition": "gte",
+                "keyValue": "= {{ $('子节点触发').item.json.startSate || new Intl.DateTimeFormat('zh-CN', {timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(Date.now())).replace(/\\//g,'-')\n }}"
+              },
+              {
+                "keyName": "fxDate",
+                "condition": "lte",
+                "keyValue": "={{ $('子节点触发').item.json.endDate ||  new Intl.DateTimeFormat('zh-CN', {timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(Date.now()+2*864e5)).replace(/\\//g,'-')\n}}"
+              }
+            ]
+          },
+          "limit": 10
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          512,
+          -48
+        ],
+        "id": "370da4af-f875-427b-a8ea-961d85c16c37",
+        "name": "获取天气预报",
+        "executeOnce": true
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 5
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -384,
+          48
+        ],
+        "id": "dcc498d6-be82-4cda-a0da-63dc3eb05c76",
+        "name": "每天5点"
+      },
+      {
+        "parameters": {
+          "content": "- fxDate 预报日期\n- sunrise 日出时间，在高纬度地区可能为空\n- sunset 日落时间，在高纬度地区可能为空\n- moonrise 当天月升时间，可能为空\n- moonset 当天月落时间，可能为空\n- moonPhase 月相名称\n- moonPhaseIcon 月相图标代码，另请参考天气图标项目\n- tempMax 预报当天最高温度\n- tempMin 预报当天最低温度\n- iconDay 预报白天天气状况的图标代码，另请参考天气图标项目\n- textDay 预报白天天气状况文字描述，包括阴晴雨雪等天气状态的描述\n- iconNight 预报夜间天气状况的图标代码，另请参考天气图标项目\n- textNight 预报晚间天气状况文字描述，包括阴晴雨雪等天气状态的描述\n- wind360Day 预报白天风向360角度\n- windDirDay 预报白天风向\n- windScaleDay 预报白天风力等级\n- windSpeedDay 预报白天风速，公里/小时\n- wind360Night 预报夜间风向360角度\n- windDirNight 预报夜间当天风向\n- windScaleNight 预报夜间风力等级\n- windSpeedNight 预报夜间风速，公里/小时\n- precip 预报当天总降水量，默认单位：毫米\n- uvIndex 紫外线强度指数\n- humidity 相对湿度，百分比数值\n- pressure 大气压强，默认单位：百帕\n- vis 能见度，默认单位：公里\n- cloud 云量，百分比数值。可能为空",
+          "height": 608,
+          "width": 496
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          240,
+          -704
+        ],
+        "typeVersion": 1,
+        "id": "930344e8-972a-4c0c-adee-c4a35ae2a7a6",
+        "name": "Sticky Note"
+      }
+    ],
+    "connections": {
+      "子节点触发": {
+        "main": [
+          [
+            {
+              "node": "每日天气预报 qweather",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "每日天气预报 qweather": {
+        "main": [
+          [
+            {
+              "node": "天气结果处理",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "天气结果处理": {
+        "main": [
+          [
+            {
+              "node": "Upsert 每日天气",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Upsert 每日天气": {
+        "main": [
+          [
+            {
+              "node": "获取天气预报",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "每天5点": {
+        "main": [
+          [
+            {
+              "node": "每日天气预报 qweather",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "d4325e5b-6353-478a-8a5e-1ede20d35942",
   "connections": {
     "子节点触发": {
       "main": [
