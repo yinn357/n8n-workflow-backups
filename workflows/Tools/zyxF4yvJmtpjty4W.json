@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2025-12-01T04:01:32.814Z",
-    "createdAt": "2025-12-01T04:01:32.814Z",
-    "versionId": "d4325e5b-6353-478a-8a5e-1ede20d35942",
+    "updatedAt": "2025-12-11T06:00:47.318Z",
+    "createdAt": "2025-12-11T06:00:47.318Z",
+    "versionId": "df546c8c-4387-498f-bef2-f708a0d189f4",
     "workflowId": "zyxF4yvJmtpjty4W",
     "nodes": [
       {
@@ -26,7 +26,7 @@
         "typeVersion": 4.2,
         "position": [
           -160,
-          -48
+          -16
         ],
         "id": "26411e39-a136-4a83-91be-99e25935322a",
         "name": "每日天气预报 qweather"
@@ -48,7 +48,7 @@
         "typeVersion": 1.1,
         "position": [
           -384,
-          -144
+          -240
         ],
         "id": "4bc961cb-ea91-4afb-8a47-11a9df7a6937",
         "name": "子节点触发"
@@ -61,7 +61,7 @@
         "typeVersion": 2,
         "position": [
           64,
-          -48
+          -16
         ],
         "id": "62a5ee0e-c52f-41b4-a3e4-8180b36acbd6",
         "name": "天气结果处理",
@@ -364,13 +364,14 @@
             ],
             "attemptToConvertTypes": false,
             "convertFieldsToString": false
-          }
+          },
+          "options": {}
         },
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1,
         "position": [
           288,
-          -48
+          -16
         ],
         "id": "ec0c9f20-79c8-4938-990d-50ef27197db1",
         "name": "Upsert 每日天气"
@@ -405,8 +406,8 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1,
         "position": [
-          512,
-          -48
+          -160,
+          -240
         ],
         "id": "370da4af-f875-427b-a8ea-961d85c16c37",
         "name": "获取天气预报",
@@ -426,7 +427,7 @@
         "typeVersion": 1.2,
         "position": [
           -384,
-          48
+          -16
         ],
         "id": "dcc498d6-be82-4cda-a0da-63dc3eb05c76",
         "name": "每天5点"
@@ -452,7 +453,7 @@
         "main": [
           [
             {
-              "node": "每日天气预报 qweather",
+              "node": "获取天气预报",
               "type": "main",
               "index": 0
             }
@@ -483,13 +484,7 @@
       },
       "Upsert 每日天气": {
         "main": [
-          [
-            {
-              "node": "获取天气预报",
-              "type": "main",
-              "index": 0
-            }
-          ]
+          []
         ]
       },
       "每天5点": {
@@ -504,17 +499,17 @@
         ]
       }
     },
-    "authors": "system migration",
+    "authors": "Yinx i",
     "name": null,
     "description": null
   },
-  "activeVersionId": "d4325e5b-6353-478a-8a5e-1ede20d35942",
+  "activeVersionId": "df546c8c-4387-498f-bef2-f708a0d189f4",
   "connections": {
     "子节点触发": {
       "main": [
         [
           {
-            "node": "每日天气预报 qweather",
+            "node": "获取天气预报",
             "type": "main",
             "index": 0
           }
@@ -545,13 +540,7 @@
     },
     "Upsert 每日天气": {
       "main": [
-        [
-          {
-            "node": "获取天气预报",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "每天5点": {
@@ -592,7 +581,7 @@
       "typeVersion": 4.2,
       "position": [
         -160,
-        -48
+        -16
       ],
       "id": "26411e39-a136-4a83-91be-99e25935322a",
       "name": "每日天气预报 qweather"
@@ -614,7 +603,7 @@
       "typeVersion": 1.1,
       "position": [
         -384,
-        -144
+        -240
       ],
       "id": "4bc961cb-ea91-4afb-8a47-11a9df7a6937",
       "name": "子节点触发"
@@ -627,7 +616,7 @@
       "typeVersion": 2,
       "position": [
         64,
-        -48
+        -16
       ],
       "id": "62a5ee0e-c52f-41b4-a3e4-8180b36acbd6",
       "name": "天气结果处理",
@@ -930,13 +919,14 @@
           ],
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
-        }
+        },
+        "options": {}
       },
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1,
       "position": [
         288,
-        -48
+        -16
       ],
       "id": "ec0c9f20-79c8-4938-990d-50ef27197db1",
       "name": "Upsert 每日天气"
@@ -971,8 +961,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1,
       "position": [
-        512,
-        -48
+        -160,
+        -240
       ],
       "id": "370da4af-f875-427b-a8ea-961d85c16c37",
       "name": "获取天气预报",
@@ -992,7 +982,7 @@
       "typeVersion": 1.2,
       "position": [
         -384,
-        48
+        -16
       ],
       "id": "dcc498d6-be82-4cda-a0da-63dc3eb05c76",
       "name": "每天5点"
@@ -1040,6 +1030,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-10-11T06:12:58.000Z",
-  "versionId": "d4325e5b-6353-478a-8a5e-1ede20d35942"
+  "updatedAt": "2025-12-11T06:00:47.312Z",
+  "versionId": "df546c8c-4387-498f-bef2-f708a0d189f4"
 }
